@@ -1,0 +1,16 @@
+## Interface: 11200
+## Title: Punschrulle
+## Notes: Highly customizable castbar and tasty treat!
+## Author: Attero
+## Version: 1.2
+## Dependencies: 
+## SavedVariables: PunschrulleDB
+## SavedVariablesPerCharacter: PunschrulleProfile
+
+Punschrulle.lua
+core\Tables.lua
+core\Options.lua
+core\Entity.lua
+core\Bar.lua
+core\Castbar.lua
+core\Mirror.lua
