@@ -387,6 +387,8 @@ Punsch_Tables_ProfilePresets = {
 				},
 				Events = {
 					BREATH = {
+						label = "Breath",
+						enable = true,
 						r = 0,
 						g = 0.5,
 						b = 1,
@@ -394,6 +396,8 @@ Punsch_Tables_ProfilePresets = {
 						icon = "Interface\\Icons\\Spell_Shadow_DemonBreath"
 					},
 					EXHAUSTION = {
+						label = "Exhaustion",
+						enable = true,
 						r = 1,
 						g = 0.9,
 						b = 0,
@@ -401,6 +405,8 @@ Punsch_Tables_ProfilePresets = {
 						icon = "Interface\\Icons\\Ability_Suffocate"
 					},
 					FEIGNDEATH = {
+						label = "Feign Death",
+						enable = true,
 						r = 1,
 						g = 0.7,
 						b = 0,
@@ -408,6 +414,8 @@ Punsch_Tables_ProfilePresets = {
 						icon = "Interface\\Icons\\Ability_Rogue_FeignDeath"
 					},
 					CAMP = {
+						label = "Logout",
+						enable = true,
 						r = 1,
 						g = 0.7,
 						b = 0,
@@ -415,6 +423,8 @@ Punsch_Tables_ProfilePresets = {
 						icon = "Interface\\Icons\\Spell_Magic_PolymorphChicken"
 					},
 					QUIT = {
+						label = "Quit Game",
+						enable = true,
 						r = 1,
 						g = 0.7,
 						b = 0,
@@ -422,6 +432,8 @@ Punsch_Tables_ProfilePresets = {
 						icon = "Interface\\Icons\\Spell_Magic_PolymorphChicken"
 					},
 					INSTANCE_BOOT = {
+						label = "Instance Boot",
+						enable = true,
 						r = 1,
 						g = 0,
 						b = 0,
@@ -429,6 +441,8 @@ Punsch_Tables_ProfilePresets = {
 						icon = "Interface\\Icons\\INV_Misc_Rune_01"
 					},
 					SUMMON = {
+						label = "Summon",
+						enable = true,
 						r = 1,
 						g = 0.3,
 						b = 1,

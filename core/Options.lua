@@ -2138,10 +2138,21 @@ function Punsch_Options_EditMirrorEvents_Create()
 	local e = PunschEditFrames["MirrorEvents"].ChildHandle
 	e.num = e.num - 1;
 	for name,_ in pairs(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]) do
-
-		Punsch_Options_EditFrame_CreateHeaderOption(e,name)
-
 		local n = name
+
+		e.o[e.num]= Punsch_Options_EditFrame_CreateEditTextOption(e,"Event name", function () 
+			return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].label
+		end, function (s)
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].label = s
+		end)
+
+
+		e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show event", function ()
+			return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].enable
+		end, function (s)
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].enable = s
+		end)
+
 		e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
 			return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].r,
 				PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].g,

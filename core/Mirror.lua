@@ -50,37 +50,6 @@ function Punsch_Mirror_Create()
 		Punsch_Mirror_OnEventStop(PunschMirrorEvents["SUMMON"])
 		oldOnAccept()
 	end
-
-
-	--[[ FURTHER things to implement.
-
-	 restimer
-	this:RegisterEvent("PLAYER_DEAD");
-	this:RegisterEvent("PLAYER_ALIVE");
-	this:RegisterEvent("PLAYER_UNGHOST");
-	this:RegisterEvent("RESURRECT_REQUEST");
-
-		if ( event == "RESURRECT_REQUEST" ) then
-		if ( ResurrectHasSickness() ) then
-			StaticPopup_Show("RESURRECT", arg1);
-		else
-			StaticPopup_Show("RESURRECT_NO_SICKNESS", arg1);
-	
-
-	dueloutofbounds
-	this:RegisterEvent("DUEL_REQUESTED");
-	this:RegisterEvent("DUEL_OUTOFBOUNDS");
-	this:RegisterEvent("DUEL_INBOUNDS");
-	this:RegisterEvent("DUEL_FINISHED");
-	--DUEL_OUTOFBOUNDS timer is static 10
-
-	flightpaths
-	this:RegisterEvent("PLAYER_CONTROL_LOST");
-	this:RegisterEvent("PLAYER_CONTROL_GAINED");
-	if ( UnitOnTaxi("player") ) then
-		return;
-	end
-	--]]
 end
 
 --updates the bars to the current state of the db
@@ -151,8 +120,8 @@ function Punsch_Mirror_OnEvent()
     	if not PunschMirrorEvents[arg1] then
     		PunschMirrorEvents[arg1] = {}
     		PunschMirrorEvents[arg1].name = arg1
-    		PunschMirrorEvents[arg1].label = arg6
     	end
+    	PunschMirrorEvents[arg1].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][arg1].label
     	PunschMirrorEvents[arg1].value = arg2
     	PunschMirrorEvents[arg1].max = arg3
     	PunschMirrorEvents[arg1].step = arg4
@@ -171,8 +140,8 @@ function Punsch_Mirror_OnEvent()
     	if not PunschMirrorEvents["CAMP"] then
     		PunschMirrorEvents["CAMP"] = {}
     		PunschMirrorEvents["CAMP"].name = "CAMP"
-    		PunschMirrorEvents["CAMP"].label = "Logout"
     	end
+    	PunschMirrorEvents["CAMP"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["CAMP"].label
     	PunschMirrorEvents["CAMP"].value = 20 * 1000
     	PunschMirrorEvents["CAMP"].max = 20 * 1000
     	PunschMirrorEvents["CAMP"].step = -1
@@ -182,8 +151,8 @@ function Punsch_Mirror_OnEvent()
     	if not PunschMirrorEvents["QUIT"] then
     		PunschMirrorEvents["QUIT"] = {}
     		PunschMirrorEvents["QUIT"].name = "QUIT"
-    		PunschMirrorEvents["QUIT"].label = "Quit Game"
     	end
+    	PunschMirrorEvents["QUIT"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["QUIT"].label
     	PunschMirrorEvents["QUIT"].value = 20 * 1000
     	PunschMirrorEvents["QUIT"].max = 20 * 1000
     	PunschMirrorEvents["QUIT"].step = -1
@@ -193,8 +162,8 @@ function Punsch_Mirror_OnEvent()
     	if not PunschMirrorEvents["BOOT"] then
     		PunschMirrorEvents["BOOT"] = {}
     		PunschMirrorEvents["BOOT"].name = "INSTANCE_BOOT"
-    		PunschMirrorEvents["BOOT"].label = "Instance Boot"
     	end
+    	PunschMirrorEvents["BOOT"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["BOOT"].label
     	PunschMirrorEvents["BOOT"].value = GetInstanceBootTimeRemaining() * 1000
     	PunschMirrorEvents["BOOT"].max = GetInstanceBootTimeRemaining() * 1000
     	PunschMirrorEvents["BOOT"].step = -1
@@ -207,8 +176,8 @@ function Punsch_Mirror_OnEvent()
     	if not PunschMirrorEvents["SUMMON"] then
     		PunschMirrorEvents["SUMMON"] = {}
     		PunschMirrorEvents["SUMMON"].name = "SUMMON"
-    		PunschMirrorEvents["SUMMON"].label = "Summon"
     	end
+    	PunschMirrorEvents["SUMMON"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["SUMMON"].label
     	PunschMirrorEvents["SUMMON"].value = 0
     	PunschMirrorEvents["SUMMON"].max = GetSummonConfirmTimeLeft() * 1000
     	PunschMirrorEvents["SUMMON"].step = 1
@@ -220,18 +189,6 @@ function Punsch_Mirror_OnEvent()
    		DEFAULT_CHAT_FRAME:AddMessage("UNHANDLED EVENT: " ..event)
     end
 end
-
---[[
-Punsch_Mirror_HooksStaticPaneClosing = {}
-function Punsch_Mirror_HookStaticPaneClosing(pane,event)
-	local p = StaticPopup_FindVisible(pane)
-	local oldOnHide = p:GetScript("OnHide")
-	p:SetScript("OnHide",function ()
-		Punsch_Mirror_OnEventStop(PunschMirrorEvents["QUIT"])
-		oldOnHide()
-	end)
-
-end--]]
 
 function Punsch_Mirror_AssignFirstUnassignedEvent(event)
 	for i=0,PunschMirrorCount do 
@@ -245,6 +202,7 @@ end
 function Punsch_Mirror_AssignEvent(e,event)
 	e.event = event
 	if event then
+		if not PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].enable then return end
 		Punsch_Bar_FadeStop(e)
 		e.selfFill:SetVertexColor(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].r,
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].g,

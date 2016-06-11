@@ -1,4 +1,4 @@
-local PunschDBVer = 7
+local PunschDBVer = 8
 
 function Punschrulle_Initialize()
 	Punschrulle = CreateFrame("Frame", nil, UIParent)
@@ -10,7 +10,7 @@ function Punschrulle_Initialize()
 	Punschrulle:SetScript("OnEvent",Punschrulle_OnEvent)
 	Punschrulle:RegisterEvent("ADDON_LOADED");
 
-	DEFAULT_CHAT_FRAME:AddMessage("/punsch");
+	DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: /punsch");
 end
 
 function Punschrulle_OnEvent()
@@ -22,15 +22,9 @@ function Punschrulle_OnEvent()
 	end
 end
 
-function Punschrulle_CreateEntities() 
-	Punsch_Castbar_Create()
-	Punsch_Mirror_Create()
-	Punsch_Entity_UpdateAll()
-end
-
 function Punschrulle_GlobalsLoaded()
 	if PunschrulleDB==nil or (PunschrulleDB.DBVer~=PunschDBVer) then
-		DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: db outdated; settings reset to default");
+		DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: DB outdated; settings reset to default");
 		Punschrulle_Setdefaults();
 	end
 	if PunschrulleProfile==nil then
@@ -39,7 +33,9 @@ function Punschrulle_GlobalsLoaded()
 		PunschrulleProfile = "Default"
 		DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: Profile not found, using profile " .. PunschrulleDB.Profiles[PunschrulleProfile].Name)
 	end
-	Punschrulle_CreateEntities()
+	Punsch_Castbar_Create()
+	Punsch_Mirror_Create()
+	Punsch_Entity_UpdateAll()
 end
 
 function Punschrulle_Command(msg)
