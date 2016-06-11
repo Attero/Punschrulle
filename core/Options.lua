@@ -2136,7 +2136,6 @@ function Punsch_Options_EditMirrorEvents_Create()
 	PunschEditFrames["MirrorEvents"] = {}
 	PunschEditFrames["MirrorEvents"].Handle,PunschEditFrames["MirrorEvents"].ChildHandle = Punsch_Options_EditFrame_Create("Mirror Events") 
 	local e = PunschEditFrames["MirrorEvents"].ChildHandle
-	e.num = e.num - 1;
 	for name,_ in pairs(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]) do
 		local n = name
 
@@ -2172,7 +2171,7 @@ function Punsch_Options_EditMirrorEvents_Create()
 		end)
 		PunschEditFrames["MirrorEvents"][name]:SetPoint("TOPLEFT", e, "TOPLEFT",1,-e.num * 14)
 
-		e.num = e.num + 1;
+		e.num = e.num + 2;
 	end
 
 	PunschEditFrames["MirrorEvents"].update = function ()
