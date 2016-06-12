@@ -1,3 +1,5 @@
+--Aimed Shot workaround based on rais_Autoshot. All credit for that goes straight to raisnilt.
+
 function Punsch_Castbar_Create()
 	local db = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"]
 	PunschEntities["Castbar"] = {}
@@ -25,8 +27,20 @@ function Punsch_Castbar_Create()
 	e.delayedBy = 0;
 	e.fadeTimeleft = 0;
 
+	--initializing ranged haste for aimedshot workaround
+	e.HasteFromBerserking = 1
+    e.HasteFromQuickShots = 1
+    e.HasteFromKiss = 1
+    e.HasteFromRapid = 1
+
 	PunschEntities["Castbar"].OriginalUseAction = UseAction
 	UseAction = Punsch_Castbar_HookUseAction
+
+	PunschEntities["Castbar"].OriginalCastSpell = CastSpell
+	CastSpell = Punsch_Castbar_HookCastSpell
+
+	PunschEntities["Castbar"].OriginalCastSpellByName = CastSpellByName
+	CastSpellByName = Punsch_Castbar_HookCastSpellByName
 
 	PunschEntities["Castbar"].OriginalDoTradeSkill = DoTradeSkill
 	DoTradeSkill = Punsch_Castbar_HookDoTradeSkill
@@ -54,6 +68,11 @@ function Punsch_Castbar_Create()
 	e.self:RegisterEvent("SPELLCAST_INTERRUPTED")
 	e.self:RegisterEvent("SPELLCAST_START")
 	e.self:RegisterEvent("SPELLCAST_STOP")
+	--keeps track of buffs on self
+	e.self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
+	e.self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS")
+	e.self:RegisterEvent("PLAYER_DEAD")
+
 	--e.self:RegisterEvent("UNIT_MANA")
 end
 
@@ -183,7 +202,7 @@ function Punsch_Castbar_OnEvent()
     	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("SPELLCAST_DELAYED " ..arg1) end
     	Punsch_Castbar_OnCastDelayed(arg1)
     elseif (event == "SPELLCAST_FAILED") then
-    	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("SPELLCAST_FAILED") end
+    	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("SPELLCAST_FAILED ") end
     	Punsch_Castbar_OnCastFailed()
     elseif (event == "SPELLCAST_INTERRUPTED") then
     	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("SPELLCAST_INTERRUPTED") end
@@ -191,6 +210,41 @@ function Punsch_Castbar_OnEvent()
     elseif (event == "SPELLCAST_STOP") then
     	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("SPELLCAST_STOP") end
     	Punsch_Castbar_OnCastStop()
+    elseif (event == "CHAT_MSG_SPELL_AURA_GONE_SELF") then
+    	local buffName = strsub(arg1,0, -17)
+    	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("CHAT_MSG_SPELL_AURA_GONE_SELF '" .. buffName .. "'") end
+    	if buffName == "Berserking" then
+    		PunschEntities["Castbar"].HasteFromBerserking = 1
+    	elseif buffName == "Quick Shots" then
+    		PunschEntities["Castbar"].HasteFromQuickShots = 1
+    	elseif buffName == "Kiss of the Spider" then
+    		PunschEntities["Castbar"].HasteFromKiss = 1
+    	elseif buffName == "Rapid Fire" then
+    		PunschEntities["Castbar"].HasteFromRapid = 1
+    	end
+    elseif (event == "CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS") then
+    	local _,nameend = strfind(arg1 .. " ", ".", -1)
+    	local buffName = strsub(arg1,10, nameend -2)
+    	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS '" .. buffName .. "'") end
+    	if buffName == "Berserking" then
+    		if((UnitHealth("player")/UnitHealthMax("player")) >= 0.40) then
+				PunschEntities["Castbar"].HasteFromBerserking = 1.3 - ((UnitHealth("player")/UnitHealthMax("player"))-0.4) * 5/3 * 0.2
+			else
+				PunschEntities["Castbar"].HasteFromBerserking = 1.30
+			end
+		elseif buffName == "Quick Shots" then
+    		PunschEntities["Castbar"].HasteFromQuickShots = 1.3
+    	elseif buffName == "Kiss of the Spider" then
+    		PunschEntities["Castbar"].HasteFromKiss = 1.2
+    	elseif buffName == "Rapid Fire" then
+    		PunschEntities["Castbar"].HasteFromRapid = 1.4
+    	end
+	elseif (event =="PLAYER_DEAD") then
+		if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("PLAYER_DEAD") end
+		PunschEntities["Castbar"].HasteFromBerserking = 1
+    	PunschEntities["Castbar"].HasteFromQuickShots = 1
+    	PunschEntities["Castbar"].HasteFromKiss = 1
+    	PunschEntities["Castbar"].HasteFromRapid = 1
 	end
 end
 
@@ -203,13 +257,28 @@ function Punsch_Castbar_HookDoTradeSkill(index, repeatTimes)
 	PunschEntities["Castbar"].OriginalDoTradeSkill(index, repeatTimes)
 end
 
+local Punsch_Castbar_Tooltip = CreateFrame("GameTooltip","Punsch_Castbar_Tooltip",UIParent,"GameTooltipTemplate");
+Punsch_Castbar_Tooltip:SetOwner(UIParent,"ANCHOR_NONE");
+
 function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 	local e = PunschEntities["Castbar"]
+
 	e.LastSpellDropOnLoseIsCurrentAction = nil
 	e.LastSpellSetOnLoseIsTargeting = nil
 	e.LastSpellLocalCast = nil
 	e.LastSpellIcon = nil
 	e.OriginalUseAction(slot,checkCursor,onSelf)
+
+	--detecting Aimed Shot
+	if IsCurrentAction(slot) then 
+		Punsch_Castbar_Tooltip:ClearLines();
+		Punsch_Castbar_Tooltip:SetAction(slot);
+		local spellName = Punsch_Castbar_TooltipTextLeft1:GetText();
+		if ( spellName == "Aimed Shot" )  then
+			Punsch_Castbar_CastAimedShot()
+		end
+	end
+	--lag
 	if IsCurrentAction(slot) and not IsAttackAction(slot) then
 		if SpellIsTargeting() then -- await next gcd, should happen when player has set a target
 			e.LastUseActionSlot = slot
@@ -223,6 +292,37 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 		end
 	end
 end
+
+function Punsch_Castbar_HookCastSpell(spellID, spellTab)
+	local e = PunschEntities["Castbar"]
+
+	--detecting Aimed Shot
+	if GetSpellName(spellID, spellTab) == "Aimed Shot" then
+		Punsch_Castbar_CastAimedShot()
+	end
+
+	e.OriginalCastSpell(spellID, spellTab)
+end
+
+function Punsch_Castbar_HookCastSpellByName(spellName)
+	local e = PunschEntities["Castbar"]
+
+	--detecting Aimed Shot
+	if spellName == "Aimed Shot" then
+		Punsch_Castbar_CastAimedShot()
+	end
+
+	e.OriginalCastSpellByName(spellName)
+end
+
+function Punsch_Castbar_CastAimedShot()
+	local e = PunschEntities["Castbar"]
+	if not e.isCasting then
+		local AimedCastTime = 3000/e.HasteFromBerserking/e.HasteFromQuickShots/e.HasteFromKiss/e.HasteFromRapid
+		Punsch_Castbar_OnCastStart("Aimed Shot",AimedCastTime)
+	end
+end
+
 
 function Punsch_Castbar_GetLastSpellInfo() 
 	local e = PunschEntities["Castbar"]
@@ -435,13 +535,14 @@ function Punsch_Castbar_OnCastDelayed(duration)
 	PunschEntities["Castbar"].endTime = PunschEntities["Castbar"].endTime + duration/1000;
 end
 
-
 function Punsch_Castbar_OnCastInterrupted()
-	PunschEntities["Castbar"].isCasting = false;
-	if PunschEntities["Castbar"].PlayerInterruptAsFailure then
-		Punsch_Castbar_StartFade(false) 
-	else
-		Punsch_Castbar_StartFade(true)
+	if PunschEntities["Castbar"].isCasting then
+		PunschEntities["Castbar"].isCasting = false;
+		if PunschEntities["Castbar"].PlayerInterruptAsFailure then
+			Punsch_Castbar_StartFade(false) 
+		else
+			Punsch_Castbar_StartFade(true)
+		end
 	end
 end
 
@@ -449,7 +550,13 @@ function Punsch_Castbar_OnCastFailed()
 	local e = PunschEntities["Castbar"]
 	if e.isChannel ~= true then
 		e.isCasting = false;
-		Punsch_Castbar_StartFade(false)
+		if e.spellName == "Aimed Shot" and e.startTime - GetTime() < 0.08 then
+			if not e.isFading then
+				e.ContentFrame:Hide()
+			end
+		else
+			Punsch_Castbar_StartFade(false)
+		end
 	end
 end
 
@@ -484,6 +591,9 @@ function Punsch_Castbar_OnCastStart(name,duration)
 		e.LastTradeskillRepeatTimes
 		e.LastTradeskillRepeatedTimes --starts at 0
 	--]]
+	elseif e.spellName == "Aimed Shot" then
+		e.icontexture = "Interface\\Icons\\INV_Spear_07"
+		e.lag = nil
 	else
 		e.lag, e.icontexture = Punsch_Castbar_GetLastSpellInfo() 
 	end
