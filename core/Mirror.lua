@@ -161,7 +161,7 @@ function Punsch_Mirror_OnEvent()
     	if debugMirror then DEFAULT_CHAT_FRAME:AddMessage(event) end
     	if not PunschMirrorEvents["BOOT"] then
     		PunschMirrorEvents["BOOT"] = {}
-    		PunschMirrorEvents["BOOT"].name = "INSTANCE_BOOT"
+    		PunschMirrorEvents["BOOT"].name = "BOOT"
     	end
     	PunschMirrorEvents["BOOT"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["BOOT"].label
     	PunschMirrorEvents["BOOT"].value = GetInstanceBootTimeRemaining() * 1000

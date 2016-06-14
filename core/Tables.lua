@@ -114,8 +114,8 @@ Punsch_Tables_ProfilePresets = {
 					a = 0.7
 				},
 				Fill = {
-					r = 0.1,
-					g = 0.1,
+					r = 0.72,
+					g = 0.72,
 					b = 1,
 					a = 1
 				},
@@ -201,17 +201,17 @@ Punsch_Tables_ProfilePresets = {
 					TopAnchor = 0,
 					BotAnchor = 0.15,
 					Width = 3.2,
-					r = 0.18,
-					g = 0.78,
-					b = 0.78,
-					a = 0.8
+					r = 0,
+					g = 0,
+					b = 0,
+					a = 1
 				},
 
 				HideBlizzardBar = true,
 
 				FillChannel = {
-					r = 0.1,
-					g = 0.1,
+					r = 0.72,
+					g = 0.72,
 					b = 1,
 					a = 1
 				},
@@ -431,7 +431,7 @@ Punsch_Tables_ProfilePresets = {
 						a = 1,
 						icon = "Interface\\Icons\\Spell_Magic_PolymorphChicken"
 					},
-					INSTANCE_BOOT = {
+					BOOT = {
 						label = "Instance Boot",
 						enable = true,
 						r = 1,
