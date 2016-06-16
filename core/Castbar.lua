@@ -29,9 +29,9 @@ function Punsch_Castbar_Create()
 
 	--initializing ranged haste for aimedshot workaround
 	e.HasteFromBerserking = 1
-    e.HasteFromQuickShots = 1
-    e.HasteFromKiss = 1
-    e.HasteFromRapid = 1
+	e.HasteFromQuickShots = 1
+	e.HasteFromKiss = 1
+	e.HasteFromRapid = 1
 
 	PunschEntities["Castbar"].OriginalUseAction = UseAction
 	UseAction = Punsch_Castbar_HookUseAction
@@ -262,12 +262,18 @@ Punsch_Castbar_Tooltip:SetOwner(UIParent,"ANCHOR_NONE");
 
 function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 	local e = PunschEntities["Castbar"]
+	if not IsCurrentAction(slot) then 
+		e.LastSpellDropOnLoseIsCurrentAction = nil
+		e.LastSpellSetOnLoseIsTargeting = nil
+		e.LastSpellLocalCast = nil
+		e.LastSpellIcon = nil
+		e.OriginalUseAction(slot,checkCursor,onSelf)
+	else
+		e.OriginalUseAction(slot,checkCursor,onSelf)
+		return
+	end
 
-	e.LastSpellDropOnLoseIsCurrentAction = nil
-	e.LastSpellSetOnLoseIsTargeting = nil
-	e.LastSpellLocalCast = nil
-	e.LastSpellIcon = nil
-	e.OriginalUseAction(slot,checkCursor,onSelf)
+
 
 	--detecting Aimed Shot
 	if IsCurrentAction(slot) then 
