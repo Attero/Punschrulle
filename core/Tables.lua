@@ -36,7 +36,7 @@ Punsch_Tables_KnownChannels = {
 		},
 		["Arcane Missiles"] = {
 			Tick = "time",
-			TickCount = 3
+			TickCount = 5
 		},
 		["Evocation"] = {
 			Tick = "mana",
