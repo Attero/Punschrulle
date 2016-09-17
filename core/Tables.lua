@@ -26,6 +26,9 @@ Punsch_Tables_KnownChannels = {
 		DRUID = {
 			["Interface\\Icons\\Spell_Nature_Cyclone"] = "Hurricane",
 			["Interface\\Icons\\Spell_Nature_Tranquility"] = "Tranquility",
+		},
+		SHARED = {
+			["Interface\\Icons\\INV_Misc_Bandage_12"] = "Heavy Runecloth Bandage",
 		}
 	},
 	--This table contains all information needed to show ticks on channels properly
@@ -81,7 +84,15 @@ Punsch_Tables_KnownChannels = {
 			Tick = "time",
 			TickCount = 5
 		},
-
+		["Heavy Runecloth Bandage"] = {
+			Tick = "time",
+			TickCount = 8
+		},
+		["Cannibalize"] = {
+			Tick = "time",
+			TickCount = 5,
+			Icon = "Interface\\Icons\\Ability_Racial_Cannibalize"
+		},
 		--this is where information about how many ticks a channel has, if a channel ticks on unit_mana etc goes.
 	}
 }

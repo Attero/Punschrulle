@@ -467,15 +467,16 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 			local _,class = UnitClass("player")
 			if Punsch_Tables_KnownChannels.ByIcon[class] then
 				local getname = Punsch_Tables_KnownChannels.ByIcon[class][e.icontexture]
-				if getname then e.spellName = getname end
+				if getname then e.spellName = getname else
+					local getname = Punsch_Tables_KnownChannels.ByIcon["SHARED"][e.icontexture]
+					if getname then e.spellName = getname end
+				end
 			end
 		end
+	elseif e.spellName and Punsch_Tables_KnownChannels.ByName[e.spellName] then
+		if e.ShowIcon then e.icon:SetTexture(Punsch_Tables_KnownChannels.ByName[e.spellName]["Icon"]) end
 	else
 		if e.ShowIcon then e.icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark") end
-	end
-
-	if e.spellName and not e.icontexture then
-		--Recognize worldchannels here. make a table. its a whole big thing.
 	end
 
 	for i=1,e.TicksShown do 
