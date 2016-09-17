@@ -42,13 +42,16 @@ function Punsch_Mirror_Create()
 	e.self:RegisterEvent("INSTANCE_BOOT_STOP");
 
 	e.self:RegisterEvent("CONFIRM_SUMMON");
-	e.self:RegisterEvent("CANCEL_SUMMON");
+	--e.self:RegisterEvent("CANCEL_SUMMON");
 
 	--hooks confirming summons
 	local oldOnAccept = StaticPopupDialogs["CONFIRM_SUMMON"].OnAccept
 	StaticPopupDialogs["CONFIRM_SUMMON"].OnAccept = function ()
 		Punsch_Mirror_OnEventStop(PunschMirrorEvents["SUMMON"])
 		oldOnAccept()
+	end
+	StaticPopupDialogs["CONFIRM_SUMMON"].OnHide = function ()
+		Punsch_Mirror_OnEventStop(PunschMirrorEvents["SUMMON"])
 	end
 end
 
@@ -178,13 +181,14 @@ function Punsch_Mirror_OnEvent()
     		PunschMirrorEvents["SUMMON"].name = "SUMMON"
     	end
     	PunschMirrorEvents["SUMMON"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["SUMMON"].label
-    	PunschMirrorEvents["SUMMON"].value = 0
+    	PunschMirrorEvents["SUMMON"].value = GetSummonConfirmTimeLeft() * 1000
     	PunschMirrorEvents["SUMMON"].max = GetSummonConfirmTimeLeft() * 1000
-    	PunschMirrorEvents["SUMMON"].step = 1
+    	PunschMirrorEvents["SUMMON"].step = -1
     	Punsch_Mirror_AssignFirstUnassignedEvent(PunschMirrorEvents["SUMMON"])
-   	elseif (event == "CANCEL_SUMMON") then
-   		if debugMirror then DEFAULT_CHAT_FRAME:AddMessage(event) end
-   		Punsch_Mirror_OnEventStop(PunschMirrorEvents["SUMMON"])
+   	--elseif (event == "CANCEL_SUMMON") then
+   	--	DEFAULT_CHAT_FRAME:AddMessage(event) 
+   	--	if debugMirror then DEFAULT_CHAT_FRAME:AddMessage(event) end
+   	--	Punsch_Mirror_OnEventStop(PunschMirrorEvents["SUMMON"])
    	else
    		DEFAULT_CHAT_FRAME:AddMessage("UNHANDLED EVENT: " ..event)
     end

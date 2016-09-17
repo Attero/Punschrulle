@@ -33,18 +33,7 @@ function Punsch_Castbar_Create()
 	e.HasteFromKiss = 1
 	e.HasteFromRapid = 1
 
-	PunschEntities["Castbar"].OriginalUseAction = UseAction
-	UseAction = Punsch_Castbar_HookUseAction
-
-	PunschEntities["Castbar"].OriginalCastSpell = CastSpell
-	CastSpell = Punsch_Castbar_HookCastSpell
-
-	PunschEntities["Castbar"].OriginalCastSpellByName = CastSpellByName
-	CastSpellByName = Punsch_Castbar_HookCastSpellByName
-
-	PunschEntities["Castbar"].OriginalDoTradeSkill = DoTradeSkill
-	DoTradeSkill = Punsch_Castbar_HookDoTradeSkill
-
+	--Channeling Ticks
 	e.TickIndicators = {}
 
 	e.TicksShown = 0
@@ -56,6 +45,19 @@ function Punsch_Castbar_Create()
 		e.TickIndicators[i].texture:SetTexture(0,0,0,1)
 		e.TickIndicators[i].texture:Hide()
 	end
+
+	--Hooks
+	PunschEntities["Castbar"].OriginalUseAction = UseAction
+	UseAction = Punsch_Castbar_HookUseAction
+
+	PunschEntities["Castbar"].OriginalCastSpell = CastSpell
+	CastSpell = Punsch_Castbar_HookCastSpell
+
+	PunschEntities["Castbar"].OriginalCastSpellByName = CastSpellByName
+	CastSpellByName = Punsch_Castbar_HookCastSpellByName
+
+	PunschEntities["Castbar"].OriginalDoTradeSkill = DoTradeSkill
+	DoTradeSkill = Punsch_Castbar_HookDoTradeSkill
 
 	e.self:SetScript("OnEvent",Punsch_Castbar_OnEvent)
 	e.self:SetScript("OnUpdate",Punsch_Castbar_OnUpdate)
@@ -386,7 +388,7 @@ function Punsch_Castbar_OnUpdate()
 		end
 		--gradually hide ticks
 		for i=1,e.TicksShown do
-			if e.TickIndicators[i].texture:GetLeft() > e.selfFill:GetRight() then
+			if e.TickIndicators[i].texture:GetLeft() > e.selfFill:GetRight() then	--ERROR HERE
 				e.TickIndicators[i].texture:Hide()
 			elseif e.TickIndicators[i].texture:GetRight() > e.selfFill:GetRight() then
 				local w = e.TickIndicators[i].texture:GetWidth() -(e.TickIndicators[i].texture:GetRight() - e.selfFill:GetRight())
