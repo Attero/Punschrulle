@@ -473,7 +473,7 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 				end
 			end
 		end
-	elseif e.spellName and Punsch_Tables_KnownChannels.ByName[e.spellName] then
+	elseif e.spellName and Punsch_Tables_KnownChannels.ByName[e.spellName] and Punsch_Tables_KnownChannels.ByName[e.spellName]["Icon"] then
 		if e.ShowIcon then e.icon:SetTexture(Punsch_Tables_KnownChannels.ByName[e.spellName]["Icon"]) end
 	else
 		if e.ShowIcon then e.icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark") end
