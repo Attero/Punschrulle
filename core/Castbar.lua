@@ -303,7 +303,10 @@ end
 
 function Punsch_Castbar_HookCastSpell(spellID, spellTab)
 	local e = PunschEntities["Castbar"]
-
+	e.LastSpellDropOnLoseIsCurrentAction = nil
+	e.LastSpellSetOnLoseIsTargeting = nil
+	e.LastSpellLocalCast = nil
+	e.LastSpellIcon = nil
 	--detecting Aimed Shot
 	if GetSpellName(spellID, spellTab) == "Aimed Shot" then
 		Punsch_Castbar_CastAimedShot()
@@ -314,7 +317,10 @@ end
 
 function Punsch_Castbar_HookCastSpellByName(spellName)
 	local e = PunschEntities["Castbar"]
-
+	--e.LastSpellDropOnLoseIsCurrentAction = nil
+	--e.LastSpellSetOnLoseIsTargeting = nil
+	--e.LastSpellLocalCast = nil
+	--e.LastSpellIcon = nil
 	--detecting Aimed Shot
 	if spellName == "Aimed Shot" then
 		Punsch_Castbar_CastAimedShot()
@@ -434,6 +440,7 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].FillChannel.a)
 	e.selfFillShown = true;
 	e.selfFill:Show();
+	if e.ShowSpark then e.spark:Show() end
 
 	e.lag, e.icontexture = Punsch_Castbar_GetLastSpellInfo() 
 	if e.lag and e.ShowLag then
