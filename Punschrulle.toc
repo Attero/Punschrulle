@@ -8,6 +8,7 @@
 ## SavedVariablesPerCharacter: PunschrulleProfile
 
 Punschrulle.lua
+media\media.lua
 core\Tables.lua
 core\Options.lua
 core\Entity.lua

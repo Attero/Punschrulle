@@ -1,0 +1,56 @@
+--To add a new font or texture, simply put them in the same folder as the others and add it to the appropriate list below.
+--Do note that the file paths are case sensitive.
+
+PunschrulleFonts = {
+	Aldrich = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Aldrich.ttf",
+	Bangers = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Bangers.ttf",
+	Celestia = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Celestia.ttf",
+	DorisPP = "Interface\\AddOns\\Punschrulle\\media\\fonts\\DorisPP.ttf",
+	Enigmatic = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Enigmatic.ttf",
+	FasterOne = "Interface\\AddOns\\Punschrulle\\media\\fonts\\FasterOne.ttf",
+	Fitzgerald = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Fitzgerald.ttf",
+	Gentium = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Gentium.ttf",
+	Iceland = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Iceland.ttf",
+	Inconsolata = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Inconsolata.ttf",
+	LiberationSans = "Interface\\AddOns\\Punschrulle\\media\\fonts\\LiberationSans.ttf",
+	Luna = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Luna.ttf",
+	MetalLord = "Interface\\AddOns\\Punschrulle\\media\\fonts\\MetalLord.ttf",
+	Optimus = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Optimus.ttf",
+	TradeWinds = "Interface\\AddOns\\Punschrulle\\media\\fonts\\TradeWinds.ttf",
+	VeraSerif = "Interface\\AddOns\\Punschrulle\\media\\fonts\\VeraSerif.ttf",
+	Yellowjacket = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Yellowjacket.ttf"
+}
+
+PunschrulleTextures = {
+	Aluminium = "Interface\\AddOns\\Punschrulle\\media\\textures\\Aluminium",
+	Armory = "Interface\\AddOns\\Punschrulle\\media\\textures\\Armory",
+	BantoBar = "Interface\\AddOns\\Punschrulle\\media\\textures\\BantoBar",
+	Bars = "Interface\\AddOns\\Punschrulle\\media\\textures\\Bars",
+	Dabs = "Interface\\AddOns\\Punschrulle\\media\\textures\\Dabs",
+	Diagonal = "Interface\\AddOns\\Punschrulle\\media\\textures\\Diagonal",
+	Frost = "Interface\\AddOns\\Punschrulle\\media\\textures\\Frost",
+	Glamour = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour",
+	Glamour2 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour2",
+	Glamour3 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour3",
+	Glamour4 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour4",
+	Glamour5 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour5",
+	Glamour6 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour6",
+	Glamour7 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour7",
+	Glaze = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glaze",
+	Gloss = "Interface\\AddOns\\Punschrulle\\media\\textures\\Gloss",
+	Healbot = "Interface\\AddOns\\Punschrulle\\media\\textures\\Healbot",
+	LiteStep = "Interface\\AddOns\\Punschrulle\\media\\textures\\LiteStep",
+	Luna = "Interface\\AddOns\\Punschrulle\\media\\textures\\Luna",
+	Lyfe = "Interface\\AddOns\\Punschrulle\\media\\textures\\Lyfe",
+	Minimalist = "Interface\\AddOns\\Punschrulle\\media\\textures\\Minimalist",
+	Otravi = "Interface\\AddOns\\Punschrulle\\media\\textures\\Otravi",
+	Perl2 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Perl2",
+	Rocks = "Interface\\AddOns\\Punschrulle\\media\\textures\\Rocks",
+	Ruben = "Interface\\AddOns\\Punschrulle\\media\\textures\\Ruben",
+	Runes = "Interface\\AddOns\\Punschrulle\\media\\textures\\Runes",
+	Skewed = "Interface\\AddOns\\Punschrulle\\media\\textures\\Skewed",
+	Smooth = "Interface\\AddOns\\Punschrulle\\media\\textures\\Smooth",
+	Striped = "Interface\\AddOns\\Punschrulle\\media\\textures\\Striped",
+	Wisps = "Interface\\AddOns\\Punschrulle\\media\\textures\\Wisps",
+	Xeon = "Interface\\AddOns\\Punschrulle\\media\\textures\\Xeon"
+}

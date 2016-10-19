@@ -706,3 +706,8 @@ function Punsch_Castbar_StartFade(successful)
 		if e.ShowSpark then e.spark:Hide() end
 	end
 end
+
+--[[
+	if class == "MAGE" then
+		TheoryCraft_Data.Stats["regenfromspirit"] = TheoryCraft_Data.Stats["spirit"]/8+6.25
+		--]]
