@@ -1,4 +1,4 @@
-local PunschDBVer = 8
+local PunschDBVer = 10
 
 function Punschrulle_Initialize()
 	Punschrulle = CreateFrame("Frame", nil, UIParent)

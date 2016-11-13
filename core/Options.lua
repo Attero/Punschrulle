@@ -1396,6 +1396,18 @@ function Punsch_Options_EditCastbarText_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].TextRight.sa = a
 	end)
 
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Count up on cast", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].CountUpOnCast
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].CountUpOnCast = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Count up on channel", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].CountUpOnChannel
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].CountUpOnChannel = s
+	end)
+
 	Punsch_Options_EditFrame_CreateHeaderOption(e,"Delay text")
 
 

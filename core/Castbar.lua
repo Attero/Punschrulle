@@ -115,6 +115,9 @@ function Punsch_Castbar_Update(e)
 	e.fadefht = db.Fade.FailureHoldTime;
 	e.PlayerInterruptAsFailure = PlayerInterruptAsFailure;
 
+	e.CountUpOnChannel = db.CountUpOnChannel;
+	e.CountUpOnCast = db.CountUpOnCast;
+
 	e.channelDelayToDuration = db.ChannelDelayToDuration;
 
 	e.text3:SetFont(Punschrulle_GetFont(db.TextDelay.Font), db.TextDelay.FontSize)
@@ -275,8 +278,6 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 		return
 	end
 
-
-
 	--detecting Aimed Shot
 	if IsCurrentAction(slot) then 
 		Punsch_Castbar_Tooltip:ClearLines();
@@ -286,6 +287,7 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 			Punsch_Castbar_CastAimedShot()
 		end
 	end
+
 	--lag
 	if IsCurrentAction(slot) and not IsAttackAction(slot) then
 		if SpellIsTargeting() then -- await next gcd, should happen when player has set a target
@@ -419,7 +421,12 @@ function Punsch_Castbar_OnUpdate()
 
 	local t = e.endTime - time;
 	if t < 0 then t = 0 end
-	e.text2:SetText(string.format("%." .. e.decimals .. "f",t) .."/" .. string.format("%." .. e.decimals .. "f",e.duration));
+
+	if (e.isChannel and e.CountUpOnChannel) or (not e.isChannel and e.CountUpOnCast) then
+		e.text2:SetText(string.format("%." .. e.decimals .. "f",e.duration-t) .."/" .. string.format("%." .. e.decimals .. "f",e.duration));
+	else
+		e.text2:SetText(string.format("%." .. e.decimals .. "f",t) .."/" .. string.format("%." .. e.decimals .. "f",e.duration));
+	end
 end
 
 function Punsch_Castbar_OnChannelStart(name,duration)
@@ -495,6 +502,11 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 		local tickinfo = Punsch_Tables_KnownChannels.ByName[e.spellName]
 		if tickinfo then
 			if tickinfo.Tick == "time" then
+				if e.spellName == "Arcane Missiles" and duration == 3000 then
+					tickinfo.TickCount = 3
+				elseif e.spellName == "Arcane Missiles" and duration == 4000 then
+					tickinfo.TickCount = 4
+				end
 				e.TicksShown = tickinfo.TickCount
 				for i=1,tickinfo.TickCount do 
 					if i == tickinfo.TickCount then
@@ -537,18 +549,31 @@ function Punsch_Castbar_OnChannelUpdate(duration)
 	local e = PunschEntities["Castbar"]
 	local newEndTime = GetTime() + duration/1000
 	if e.channelDelayToDuration then
+		if e.TickEnable then
+			for i=1,e.TicksShown do 
+				--move the ticks:
+				e.TickIndicators[i].texture:SetPoint("LEFT",UIParent,"LEFT",e.TickIndicators[i].texture:GetLeft()-(e.self:GetWidth()*((e.endTime- newEndTime)/e.duration )),0)
+				--hide ticks outside of the castbar
+				if e.TickIndicators[i].texture:GetRight()<e.self:GetLeft() then
+					e.TickIndicators[i].texture:Hide()
+				end
+
+			end
+		end
 		e.delayedBy = e.delayedBy + (newEndTime - e.endTime) 
 		e.endTime = newEndTime;
 	else
 		e.delayedBy = newEndTime - e.endTime
 		e.selfFill:SetPoint("TOPLEFT",e.self,"TOPLEFT",-(e.delayedBy/e.duration)*e.self:GetWidth(),0);
 		--potentially indicate lost channelticks here
+
 	end
 end
 
 function Punsch_Castbar_OnCastDelayed(duration)
-	PunschEntities["Castbar"].delayedBy = PunschEntities["Castbar"].delayedBy + duration/1000;
-	PunschEntities["Castbar"].endTime = PunschEntities["Castbar"].endTime + duration/1000;
+	local e = PunschEntities["Castbar"]
+	e.delayedBy = e.delayedBy + duration/1000;
+	e.endTime = e.endTime + duration/1000;
 end
 
 function Punsch_Castbar_OnCastInterrupted()
@@ -708,6 +733,26 @@ function Punsch_Castbar_StartFade(successful)
 end
 
 --[[
+	_, tmp = UnitStat("player", 4)
+	TheoryCraft_Data.Stats["intellect"] = tmp
+	_, tmp = UnitStat("player", 5)
+	TheoryCraft_Data.Stats["spirit"] = tmp
+
+
 	if class == "MAGE" then
 		TheoryCraft_Data.Stats["regenfromspirit"] = TheoryCraft_Data.Stats["spirit"]/8+6.25
+		
+
+	local manaregen = TheoryCraft_GetStat("manaperfive")/5
+	manaregen = manaregen+TheoryCraft_Data.Stats["totalmana"]*TheoryCraft_GetStat("FelEnergy")/4
+	TheoryCraft_Data.Stats["regen"] = manaregen+TheoryCraft_Data.Stats["regenfromspirit"]
+	TheoryCraft_Data.Stats["icregen"] = manaregen+(TheoryCraft_Data.Stats["regenfromspirit"])*TheoryCraft_GetStat("ICPercent")
+ 	if (class == "MAGE") then
+		TheoryCraft_Data.Stats["maxtotalmana"] = TheoryCraft_Data.Stats["totalmana"]+TheoryCraft_Data.Stats["regenfromspirit"]*15*8+1100+manaregen*8
+	end
+	if (class == "WARLOCK") then
+		getlifetap(TheoryCraft_Data.Stats)
+	end
+
 		--]]
+

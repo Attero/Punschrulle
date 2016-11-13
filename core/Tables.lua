@@ -109,11 +109,11 @@ Punsch_Tables_ProfilePresets = {
 		["Entities"] = {
 			["Castbar"] = {
 				--Entity
-				Width = 351,
+				Width = 358,
 				Height = 36,
 				Anchor = {
-					X = -175,
-					Y = -164,
+					X = -179,
+					Y = -176,
 					rPoint = "CENTER",
 					rTo = "",
 					Point = "TOPLEFT"
@@ -125,10 +125,10 @@ Punsch_Tables_ProfilePresets = {
 					a = 0.7
 				},
 				Fill = {
-					r = 0.72,
-					g = 0.72,
-					b = 1,
-					a = 1
+					r = 0.22,
+					g = 0.38,
+					b = 0.55,
+					a = 0.7
 				},
 
 				Texture = "Glamour",
@@ -154,17 +154,17 @@ Punsch_Tables_ProfilePresets = {
 				IconPadding = 0,
 
 				Spark = {
-					Enable = false,
+					Enable = true,
 					Height = 60,
 					Width = 15,
-					r = 1,
-					g = 1,
-					b = 1,
+					r = 0.13,
+					g = 0.23,
+					b = 0.34,
 					a = 1,
 				},
 
 				TextLeft = {
-					X = -5,
+					X = -18,
 					Y = 0,
 					rPoint = "CENTER",
 					Point = "CENTER",
@@ -175,11 +175,11 @@ Punsch_Tables_ProfilePresets = {
 					sr = 0,
 					sg = 0,
 					sb = 0,
-					sa = 0,
-					Font = "Bangers",
+					sa = 1,
+					Font = "Optimus",
 					FontSize = 18,
-					FontShadowX = 0.8,
-					FontShadowY = 0.8,
+					FontShadowX = -0.8,
+					FontShadowY = -0.8,
 				},
 
 				TextRight = {
@@ -194,14 +194,17 @@ Punsch_Tables_ProfilePresets = {
 					sr = 0,
 					sg = 0,
 					sb = 0,
-					sa = 0,
-					Font = "TradeWinds",
+					sa = 1,
+					Font = "Optimus",
 					FontSize = 10,
-					FontShadowX = 0.8,
-					FontShadowY = 0.8,
+					FontShadowX = -0.8,
+					FontShadowY = -0.8,
 				},
 
 				--Castbar
+
+				CountUpOnCast = true,
+				CountUpOnChannel = false,
 
 				ShowLag = true,
 
@@ -221,17 +224,17 @@ Punsch_Tables_ProfilePresets = {
 				HideBlizzardBar = true,
 
 				FillChannel = {
-					r = 0.72,
-					g = 0.72,
-					b = 1,
-					a = 1
+					r = 0.22,
+					g = 0.38,
+					b = 0.55,
+					a = 0.7
 				},
 
 				Lag = {
 					r = 1,
 					g = 0,
 					b = 0,
-					a = 0.4
+					a = 0.7
 				},
 
 				TextDelay = {
@@ -247,10 +250,10 @@ Punsch_Tables_ProfilePresets = {
 					sg = 0,
 					sb = 0,
 					sa = 0,
-					Font = "TradeWinds",
-					FontSize = 12,
-					FontShadowX = 0.8,
-					FontShadowY = 0.8,
+					Font = "Optimus",
+					FontSize = 10,
+					FontShadowX = -0.8,
+					FontShadowY = -0.8,
 					AnchorToDuration = true,
 				},
 
