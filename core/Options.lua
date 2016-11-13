@@ -1131,11 +1131,13 @@ function Punsch_Options_EditCastbar_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Tick.Enable = s
 	end)
 
+	--[[ Unimplemented feature
 	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Lag on each tick", function ()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Tick.ShowLag
 	end, function (s)
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Tick.ShowLag = s
 	end)
+	--]]
 
 	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show as Solid", function ()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Tick.AsSolidColor

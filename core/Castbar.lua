@@ -478,13 +478,16 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 	if e.icontexture then
 		if e.ShowIcon then e.icon:SetTexture(e.icontexture) end
 		if e.spellName == "Channeling" then
+			--try to find a class specific channel
 			local _,class = UnitClass("player")
 			if Punsch_Tables_KnownChannels.ByIcon[class] then
 				local getname = Punsch_Tables_KnownChannels.ByIcon[class][e.icontexture]
-				if getname then e.spellName = getname else
-					local getname = Punsch_Tables_KnownChannels.ByIcon["SHARED"][e.icontexture]
-					if getname then e.spellName = getname end
-				end
+				if getname then e.spellName = getname end
+			end
+			--if its stil channeling, check shared list
+			if e.spellName == "Channeling" then				
+				local getname = Punsch_Tables_KnownChannels.ByIcon["SHARED"][e.icontexture]
+				if getname then e.spellName = getname end
 			end
 		end
 	elseif e.spellName and Punsch_Tables_KnownChannels.ByName[e.spellName] and Punsch_Tables_KnownChannels.ByName[e.spellName]["Icon"] then

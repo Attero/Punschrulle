@@ -29,6 +29,16 @@ Punsch_Tables_KnownChannels = {
 		},
 		SHARED = {
 			["Interface\\Icons\\INV_Misc_Bandage_12"] = "Heavy Runecloth Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_11"] = "Runecloth Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_20"] = "Heavy Mageweave Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_19"] = "Mageweave Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_02"] = "Heavy Silk Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_01"] = "Silk Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_17"] = "Heavy Wool Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_14"] = "Wool Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_18"] = "Heavy Linen Bandage",
+			["Interface\\Icons\\INV_Misc_Bandage_15"] = "Linen Bandage",
+
 		}
 	},
 	--This table contains all information needed to show ticks on channels properly
@@ -84,16 +94,55 @@ Punsch_Tables_KnownChannels = {
 			Tick = "time",
 			TickCount = 5
 		},
+
+		--item based channels
 		["Heavy Runecloth Bandage"] = {
 			Tick = "time",
 			TickCount = 8
 		},
+		["Runecloth Bandage"] = {
+			Tick = "time",
+			TickCount = 8
+		},
+		["Heavy Mageweave Bandage"] = {
+			Tick = "time",
+			TickCount = 8
+		},
+		["Mageweave Bandage"] = {
+			Tick = "time",
+			TickCount = 8
+		},
+		["Heavy Silk Bandage"] = {
+			Tick = "time",
+			TickCount = 8
+		},
+		["Silk Bandage"] = {
+			Tick = "time",
+			TickCount = 8
+		},
+		["Heavy Wool Bandage"] = {
+			Tick = "time",
+			TickCount = 7
+		},
+		["Wool Bandage"] = {
+			Tick = "time",
+			TickCount = 7
+		},
+		["Heavy Linen Bandage"] = {
+			Tick = "time",
+			TickCount = 6
+		},
+		["Linen Bandage"] = {
+			Tick = "time",
+			TickCount = 6
+		},
+
+		--racial channel
 		["Cannibalize"] = {
 			Tick = "time",
 			TickCount = 5,
 			Icon = "Interface\\Icons\\Ability_Racial_Cannibalize"
 		},
-		--this is where information about how many ticks a channel has, if a channel ticks on unit_mana etc goes.
 	}
 }
 
