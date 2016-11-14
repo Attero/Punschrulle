@@ -1071,6 +1071,56 @@ function Punsch_Options_EditCastbar_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Spark.a = a
 	end)
 
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Frame")
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Frame", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Enable
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Enable = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Thickness", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Thickness
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Thickness = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Inner Border Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.InnerBorderSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.InnerBorderSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Outer Border Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.OuterBorderSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.OuterBorderSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.a = a
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Border Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Borderr,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Borderg,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Borderb,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Bordera
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Borderr = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Borderg = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Borderb = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Frame.Bordera = a
+	end)
+
 	Punsch_Options_EditFrame_CreateHeaderOption(e,"Border")
 
 	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Border", function ()
@@ -1408,6 +1458,12 @@ function Punsch_Options_EditCastbarText_Create()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].CountUpOnChannel
 	end, function (s)
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].CountUpOnChannel = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Spacing", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].TextRight.Spacing
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].TextRight.Spacing = s
 	end)
 
 	Punsch_Options_EditFrame_CreateHeaderOption(e,"Delay text")

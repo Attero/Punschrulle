@@ -96,6 +96,15 @@ function Punsch_Bar_Update(e,db)
 	e.text2:SetTextColor(db.TextRight.r,db.TextRight.g,db.TextRight.b,db.TextRight.a)
 	e.text2:SetShadowColor(db.TextRight.sr,db.TextRight.sg,db.TextRight.sb,db.TextRight.sa)
 
+	e.DurationTextSpacing = ""
+	local i = db.TextRight.Spacing
+	if i then
+		while i > 0 do
+			e.DurationTextSpacing = e.DurationTextSpacing .. " "
+			i = i - 1
+		end
+	end
+
 	--needed for shadowoffset to properly update.
 	local t = e.text2:GetText()
 	e.text2:SetText("")	

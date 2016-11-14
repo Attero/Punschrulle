@@ -248,6 +248,7 @@ Punsch_Tables_ProfilePresets = {
 					FontSize = 10,
 					FontShadowX = -0.8,
 					FontShadowY = -0.8,
+					Spacing = 1,
 				},
 
 				--Castbar
@@ -256,6 +257,21 @@ Punsch_Tables_ProfilePresets = {
 				CountUpOnChannel = false,
 
 				ShowLag = true,
+
+				Frame = {
+					Enable = false,
+					Thickness = 2,
+					InnerBorderSize = 1,
+					OuterBorderSize = 1,
+					Borderr = 0,
+					Borderg = 0,
+					Borderb = 0,
+					Bordera = 1,
+					r = 1,
+					g = 1,
+					b = 1,
+					a = 1,
+				},
 
 				Tick = {
 					Enable = true,

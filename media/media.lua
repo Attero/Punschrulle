@@ -4,6 +4,7 @@
 PunschrulleFonts = {
 	Aldrich = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Aldrich.ttf",
 	Bangers = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Bangers.ttf",
+	Bazooka = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Bazooka.ttf",
 	Celestia = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Celestia.ttf",
 	DorisPP = "Interface\\AddOns\\Punschrulle\\media\\fonts\\DorisPP.ttf",
 	Enigmatic = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Enigmatic.ttf",
@@ -16,8 +17,10 @@ PunschrulleFonts = {
 	Luna = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Luna.ttf",
 	MetalLord = "Interface\\AddOns\\Punschrulle\\media\\fonts\\MetalLord.ttf",
 	Optimus = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Optimus.ttf",
+	SansNarrow = "Interface\\AddOns\\Punschrulle\\media\\fonts\\SansNarrow.ttf",
 	TradeWinds = "Interface\\AddOns\\Punschrulle\\media\\fonts\\TradeWinds.ttf",
 	VeraSerif = "Interface\\AddOns\\Punschrulle\\media\\fonts\\VeraSerif.ttf",
+	Vixar = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Vixar.ttf",
 	Yellowjacket = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Yellowjacket.ttf"
 }
 
