@@ -24,6 +24,15 @@ function Punsch_Bar_Create(e,db)
 	e.spark:SetBlendMode("ADD")
 	e.spark:SetPoint("CENTER",e.selfFill,"RIGHT")
 
+	e.FramingFrame = CreateFrame("Frame",nil,e.ContentFrame)
+	e.FramingFrame:SetFrameStrata("BACKGROUND")
+
+	e.frameBot = e.FramingFrame:CreateTexture(nil,"BACKGROUND")
+	e.frameTopBar = e.FramingFrame:CreateTexture(nil,"ARTWORK")
+	e.frameMidBar = e.FramingFrame:CreateTexture(nil,"BORDER")
+	e.frameTopIcon = e.FramingFrame:CreateTexture(nil,"ARTWORK")
+	e.frameMidIcon = e.FramingFrame:CreateTexture(nil,"BORDER")
+
 	e.selfBG:SetAllPoints(e.self);
 
 	e.isBar = true
@@ -75,6 +84,39 @@ function Punsch_Bar_Update(e,db)
 	else
 		e.icon:SetAlpha(0)
 		e.self:SetWidth(db.Width)
+	end
+
+	if db.Frame.Enable then
+		e.FramingFrame:Show()
+		e.frameBot:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
+		e.frameTopBar:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
+		e.frameMidBar:SetTexture(db.Frame.r,db.Frame.b,db.Frame.g,db.Frame.a)
+
+		e.frameTopBar:SetPoint("TOPLEFT", e.self,"TOPLEFT",-db.Frame.InnerBorderSize,db.Frame.InnerBorderSize)
+		e.frameTopBar:SetPoint("BOTTOMRIGHT", e.self,"BOTTOMRIGHT",db.Frame.InnerBorderSize,-db.Frame.InnerBorderSize)
+		e.frameMidBar:SetPoint("TOPLEFT", e.frameTopBar,"TOPLEFT",-db.Frame.Thickness,db.Frame.Thickness)
+		e.frameMidBar:SetPoint("BOTTOMRIGHT", e.frameTopBar,"BOTTOMRIGHT",db.Frame.Thickness,-db.Frame.Thickness)
+
+		if e.ShowIcon then
+			e.frameTopIcon:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
+			e.frameMidIcon:SetTexture(db.Frame.r,db.Frame.b,db.Frame.g,db.Frame.a)
+			e.frameTopIcon:SetPoint("TOPLEFT", e.icon,"TOPLEFT",-db.Frame.InnerBorderSize,db.Frame.InnerBorderSize)
+			e.frameTopIcon:SetPoint("BOTTOMRIGHT", e.icon,"BOTTOMRIGHT",db.Frame.InnerBorderSize,-db.Frame.InnerBorderSize)
+			e.frameMidIcon:SetPoint("TOPLEFT", e.frameTopIcon,"TOPLEFT",-db.Frame.Thickness,db.Frame.Thickness)
+			e.frameMidIcon:SetPoint("BOTTOMRIGHT", e.frameTopIcon,"BOTTOMRIGHT",db.Frame.Thickness,-db.Frame.Thickness)
+			e.frameBot:SetPoint("TOPLEFT", e.frameMidIcon,"TOPLEFT",-db.Frame.OuterBorderSize,db.Frame.OuterBorderSize)
+			e.frameMidIcon:Show()
+			e.frameTopIcon:Show()
+		else
+			e.frameBot:SetPoint("TOPLEFT", e.frameMidBar,"TOPLEFT",-db.Frame.OuterBorderSize,db.Frame.OuterBorderSize)
+			e.frameMidIcon:Hide()
+			e.frameTopIcon:Hide()
+		end
+		e.frameBot:SetPoint("BOTTOMRIGHT", e.frameMidBar,"BOTTOMRIGHT",db.Frame.OuterBorderSize,-db.Frame.OuterBorderSize)
+		
+		
+	else
+		e.FramingFrame:Hide()
 	end
 
 	e.text1:SetFont(Punschrulle_GetFont(db.TextLeft.Font), db.TextLeft.FontSize)

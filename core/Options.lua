@@ -1919,6 +1919,56 @@ function Punsch_Options_EditMirror_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Spark.a = a
 	end)
 
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Frame")
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Frame", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Enable
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Enable = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Thickness", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Thickness
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Thickness = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Inner Border Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.InnerBorderSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.InnerBorderSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Outer Border Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.OuterBorderSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.OuterBorderSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.a = a
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Border Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Borderr,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Borderg,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Borderb,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Bordera
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Borderr = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Borderg = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Borderb = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Frame.Bordera = a
+	end)
+
 	Punsch_Options_EditFrame_CreateHeaderOption(e,"Border")
 
 	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Border", function ()

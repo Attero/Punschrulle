@@ -16,15 +16,6 @@ function Punsch_Castbar_Create()
 	e.lagBG:SetPoint("TOP",e.ContentFrame)
 	e.lagBG:SetWidth(5)
 
-	e.FramingFrame = CreateFrame("Frame",nil,e.ContentFrame)
-	e.FramingFrame:SetFrameStrata("BACKGROUND")
-
-	e.frameBot = e.FramingFrame:CreateTexture(nil,"BACKGROUND")
-	e.frameTopBar = e.FramingFrame:CreateTexture(nil,"ARTWORK")
-	e.frameMidBar = e.FramingFrame:CreateTexture(nil,"BORDER")
-	e.frameTopIcon = e.FramingFrame:CreateTexture(nil,"ARTWORK")
-	e.frameMidIcon = e.FramingFrame:CreateTexture(nil,"BORDER")
-
 	e.lagtxt = e.TextFrame:CreateFontString(nil,"OVERLAY")
 	e.lagtxt:SetFont(GameFontHighlight:GetFont(), 8)
 	e.lagtxt:SetText("0ms")
@@ -167,39 +158,6 @@ function Punsch_Castbar_Update(e)
 			db.Anchor.rPoint,
 			db.Anchor.X,
 			db.Anchor.Y)
-	end
-
-	if db.Frame.Enable then
-		e.FramingFrame:Show()
-		e.frameBot:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
-		e.frameTopBar:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
-		e.frameMidBar:SetTexture(db.Frame.r,db.Frame.b,db.Frame.g,db.Frame.a)
-
-		e.frameTopBar:SetPoint("TOPLEFT", e.self,"TOPLEFT",-db.Frame.InnerBorderSize,db.Frame.InnerBorderSize)
-		e.frameTopBar:SetPoint("BOTTOMRIGHT", e.self,"BOTTOMRIGHT",db.Frame.InnerBorderSize,-db.Frame.InnerBorderSize)
-		e.frameMidBar:SetPoint("TOPLEFT", e.frameTopBar,"TOPLEFT",-db.Frame.Thickness,db.Frame.Thickness)
-		e.frameMidBar:SetPoint("BOTTOMRIGHT", e.frameTopBar,"BOTTOMRIGHT",db.Frame.Thickness,-db.Frame.Thickness)
-
-		if e.ShowIcon then
-			e.frameTopIcon:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
-			e.frameMidIcon:SetTexture(db.Frame.r,db.Frame.b,db.Frame.g,db.Frame.a)
-			e.frameTopIcon:SetPoint("TOPLEFT", e.icon,"TOPLEFT",-db.Frame.InnerBorderSize,db.Frame.InnerBorderSize)
-			e.frameTopIcon:SetPoint("BOTTOMRIGHT", e.icon,"BOTTOMRIGHT",db.Frame.InnerBorderSize,-db.Frame.InnerBorderSize)
-			e.frameMidIcon:SetPoint("TOPLEFT", e.frameTopIcon,"TOPLEFT",-db.Frame.Thickness,db.Frame.Thickness)
-			e.frameMidIcon:SetPoint("BOTTOMRIGHT", e.frameTopIcon,"BOTTOMRIGHT",db.Frame.Thickness,-db.Frame.Thickness)
-			e.frameBot:SetPoint("TOPLEFT", e.frameMidIcon,"TOPLEFT",-db.Frame.OuterBorderSize,db.Frame.OuterBorderSize)
-			e.frameMidIcon:Show()
-			e.frameTopIcon:Show()
-		else
-			e.frameBot:SetPoint("TOPLEFT", e.frameMidBar,"TOPLEFT",-db.Frame.OuterBorderSize,db.Frame.OuterBorderSize)
-			e.frameMidIcon:Hide()
-			e.frameTopIcon:Hide()
-		end
-		e.frameBot:SetPoint("BOTTOMRIGHT", e.frameMidBar,"BOTTOMRIGHT",db.Frame.OuterBorderSize,-db.Frame.OuterBorderSize)
-		
-		
-	else
-		e.FramingFrame:Hide()
 	end
 
 	for i=1,15 do 

@@ -158,11 +158,11 @@ Punsch_Tables_ProfilePresets = {
 		["Entities"] = {
 			["Castbar"] = {
 				--Entity
-				Width = 358,
-				Height = 36,
+				Width = 355,
+				Height = 30,
 				Anchor = {
-					X = -179,
-					Y = -176,
+					X = -177,
+					Y = -215,
 					rPoint = "CENTER",
 					rTo = "",
 					Point = "TOPLEFT"
@@ -171,16 +171,16 @@ Punsch_Tables_ProfilePresets = {
 					r = 0.45,
 					g = 0.45,
 					b = 0.45,
-					a = 0.7
+					a = 0
 				},
 				Fill = {
-					r = 0.22,
-					g = 0.38,
-					b = 0.55,
-					a = 0.7
+					r = 0.54,
+					g = 0.54,
+					b = 0.54,
+					a = 1
 				},
 
-				Texture = "Glamour",
+				Texture = "Luna",
 				Border = {
 					Show = false,
 					Padding = 4,
@@ -200,7 +200,7 @@ Punsch_Tables_ProfilePresets = {
 				Decimals = 1,
 
 				ShowIcon = true,
-				IconPadding = 0,
+				IconPadding = 1,
 
 				Spark = {
 					Enable = true,
@@ -213,10 +213,10 @@ Punsch_Tables_ProfilePresets = {
 				},
 
 				TextLeft = {
-					X = -18,
+					X = 3,
 					Y = 0,
-					rPoint = "CENTER",
-					Point = "CENTER",
+					rPoint = "LEFT",
+					Point = "LEFT",
 					r = 1,
 					g = 1,
 					b = 1,
@@ -225,14 +225,14 @@ Punsch_Tables_ProfilePresets = {
 					sg = 0,
 					sb = 0,
 					sa = 1,
-					Font = "Optimus",
-					FontSize = 18,
-					FontShadowX = -0.8,
+					Font = "Vixar",
+					FontSize = 14,
+					FontShadowX = 0.8,
 					FontShadowY = -0.8,
 				},
 
 				TextRight = {
-					X = -2,
+					X = -3,
 					Y = 0,
 					rPoint = "RIGHT",
 					Point = "RIGHT",
@@ -244,11 +244,26 @@ Punsch_Tables_ProfilePresets = {
 					sg = 0,
 					sb = 0,
 					sa = 1,
-					Font = "Optimus",
-					FontSize = 10,
-					FontShadowX = -0.8,
+					Font = "Vixar",
+					FontSize = 14,
+					FontShadowX = 0.8,
 					FontShadowY = -0.8,
 					Spacing = 1,
+				},
+
+				Frame = {
+					Enable = true,
+					Thickness = 0,
+					InnerBorderSize = 0.9,
+					OuterBorderSize = 0,
+					Borderr = 0,
+					Borderg = 0,
+					Borderb = 0,
+					Bordera = 1,
+					r = 1,
+					g = 1,
+					b = 1,
+					a = 0,
 				},
 
 				--Castbar
@@ -258,20 +273,6 @@ Punsch_Tables_ProfilePresets = {
 
 				ShowLag = true,
 
-				Frame = {
-					Enable = false,
-					Thickness = 2,
-					InnerBorderSize = 1,
-					OuterBorderSize = 1,
-					Borderr = 0,
-					Borderg = 0,
-					Borderb = 0,
-					Bordera = 1,
-					r = 1,
-					g = 1,
-					b = 1,
-					a = 1,
-				},
 
 				Tick = {
 					Enable = true,
@@ -289,17 +290,17 @@ Punsch_Tables_ProfilePresets = {
 				HideBlizzardBar = true,
 
 				FillChannel = {
-					r = 0.22,
-					g = 0.38,
-					b = 0.55,
-					a = 0.7
+					r = 0.54,
+					g = 0.54,
+					b = 0.54,
+					a = 1
 				},
 
 				Lag = {
-					r = 1,
-					g = 0,
-					b = 0,
-					a = 0.7
+					r = 0.95,
+					g = 1,
+					b = 1,
+					a = 1
 				},
 
 				TextDelay = {
@@ -307,17 +308,17 @@ Punsch_Tables_ProfilePresets = {
 					Y = 0,
 					rPoint = "LEFT",
 					Point = "RIGHT",
-					r = 1,
-					g = 0.35,
-					b = 0.35,
+					r = 0.85,
+					g = 0,
+					b = 0,
 					a = 1,
 					sr = 0,
 					sg = 0,
 					sb = 0,
 					sa = 0,
-					Font = "Optimus",
-					FontSize = 10,
-					FontShadowX = -0.8,
+					Font = "Vixar",
+					FontSize = 14,
+					FontShadowX = 0.8,
 					FontShadowY = -0.8,
 					AnchorToDuration = true,
 				},
@@ -367,19 +368,19 @@ Punsch_Tables_ProfilePresets = {
 				Height = 11,
 				Anchor = {
 					X = 0,
-					Y = 0,
+					Y = 1,
 					rPoint = "TOPRIGHT",
 					rTo = "Castbar",
 					Point = "BOTTOMRIGHT"
 				},
 				Bg = {
-					r = 0.05,
-					g = 0.05,
-					b = 0.05,
-					a = 0.4
+					r = 0,
+					g = 0,
+					b = 0,
+					a = 1
 				},
 
-				Texture = "Glamour",
+				Texture = "Luna",
 
 				Border = {
 					Show = false,
@@ -399,15 +400,15 @@ Punsch_Tables_ProfilePresets = {
 				Decimals = 1,
 
 				ShowIcon = true,
-				IconPadding = 0,
+				IconPadding = 1,
 
 				Spark = {
-					Enable = false,
-					Height = 23,
-					Width = 10,
-					r = 1,
-					g = 1,
-					b = 1,
+					Enable = true,
+					Height = 22,
+					Width = 15,
+					r = 0.13,
+					g = 0.23,
+					b = 0.34,
 					a = 1,
 				},
 
@@ -428,11 +429,11 @@ Punsch_Tables_ProfilePresets = {
 					sr = 0,
 					sg = 0,
 					sb = 0,
-					sa = 0,
-					Font = "TradeWinds",
+					sa = 1,
+					Font = "Vixar",
 					FontSize = 10,
 					FontShadowX = 0.8,
-					FontShadowY = 0.8,
+					FontShadowY = -0.8,
 				},
 
 				TextRight = {
@@ -447,16 +448,31 @@ Punsch_Tables_ProfilePresets = {
 					sr = 0,
 					sg = 0,
 					sb = 0,
-					sa = 0,
-					Font = "TradeWinds",
+					sa = 1,
+					Font = "Vixar",
 					FontSize = 10,
 					FontShadowX = 0.8,
-					FontShadowY = 0.8,
+					FontShadowY = -0.8,
+				},
+
+				Frame = {
+					Enable = true,
+					Thickness = 0,
+					InnerBorderSize = 0.9,
+					OuterBorderSize = 0,
+					Borderr = 0,
+					Borderg = 0,
+					Borderb = 0,
+					Bordera = 1,
+					r = 1,
+					g = 1,
+					b = 1,
+					a = 0,
 				},
 
 				--Mirror
 				GrowUp = true, --I REALLY WANNA SET THIS TO FALSE
-				Padding = 0,
+				Padding = 1,
 				HideBlizzardBar = true,
 
 				Fade = {
