@@ -10,7 +10,7 @@ function Punsch_Option_MainWindow_Toggle()
 			PunschOptionWindow.Handle:Hide()
 		else
 			if not PunschOptionWindow.Open == nil then
-				PunschOptionWindow.Open.texture:SetTexture(0.50,0.50,0.80,1)
+				PunschOptionWindow.Open.texture:SetTexture(0.70,0.70,1,1)
 				PunschOptionWindow.Open = nil
 			end
 			PunschOptionWindow.Handle:Show()
@@ -40,7 +40,9 @@ function Punsch_Option_CreateWindows()
 	texture:SetAllPoints(btn)
 	
 	local txt = btn:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(PunschrulleFonts["SansNarrow"], 12)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText("Unlock")
 	txt:SetPoint("LEFT",btn)
 	
@@ -63,6 +65,7 @@ function Punsch_Option_CreateWindows()
 
 	PunschEditFrames["Profile"].Handle:Show();
 	PunschOptionWindow.Open = PunschEditFrames["Profile"].Handle
+	PunschOptionWindow.Open.texture:SetTexture(0.70,0.70,1,0.9)
 end
 
 function Punsch_Options_MainWindow_Create()
@@ -74,11 +77,13 @@ function Punsch_Options_MainWindow_Create()
 	PunschOptionWindow.Handle:SetHeight(400)
 
 	PunschOptionWindow.BG = PunschOptionWindow.Handle:CreateTexture(nil,"BACKGROUND")
-	PunschOptionWindow.BG:SetTexture(0.2,0.2,0.2,0.8)
+	PunschOptionWindow.BG:SetTexture(0.1,0.1,0.1,0.8)
 	PunschOptionWindow.BG:SetAllPoints(PunschOptionWindow.Handle)
 	
 	PunschOptionWindow.Title = PunschOptionWindow.Handle:CreateFontString(nil,"OVERLAY")
-	PunschOptionWindow.Title:SetFont(GameFontNormal:GetFont(), 10)
+	PunschOptionWindow.Title:SetFont(PunschrulleFonts["SansNarrow"], 14)
+	PunschOptionWindow.Title:SetShadowColor(0,0,0,1)
+	PunschOptionWindow.Title:SetShadowOffset(0.8,-0.8)
 	PunschOptionWindow.Title:SetText("Punschrulle Options")
 	PunschOptionWindow.Title:SetPoint("TOP", PunschOptionWindow.Handle)
 
@@ -175,7 +180,9 @@ function Punsch_Options_EditFrame_Create(name)
 	handle.texture:SetAllPoints(btn)
 	
 	local txt = btn:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(PunschrulleFonts["SansNarrow"], 12)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(name)
 	txt:SetPoint("LEFT",btn)
 	
@@ -186,7 +193,7 @@ function Punsch_Options_EditFrame_Create(name)
 			PunschOptionWindow.Open.texture:SetTexture(0.50,0.50,0.80,0.9)
 			PunschOptionWindow.Open:Hide()
 		end
-		handle.texture:SetTexture(0.50,0.80,0.50,0.9)
+		handle.texture:SetTexture(0.70,0.70,1,0.9)
 		PunschOptionWindow.Open = handle
 		handle:Show()
 	end)
@@ -212,6 +219,8 @@ function Punsch_Options_EditFrame_CreateHeaderOption(parent,Text)
 	parent.num = parent.num + 1;
 	local txt = parent:CreateFontString(nil,"OVERLAY")
 	txt:SetFont(GameFontNormal:GetFont(), 12)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText("            " .. Text)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
@@ -2265,8 +2274,7 @@ function Punsch_Options_EditMirrorEvents_Create()
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].label = s
 		end)
 
-
-		e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show event", function ()
+		e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Enable event", function ()
 			return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].enable
 		end, function (s)
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].enable = s
@@ -2284,12 +2292,21 @@ function Punsch_Options_EditMirrorEvents_Create()
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].a = a
 		end)
 
+		local Iconbox = e:CreateTexture(nil,"BACKGROUND")
+		Iconbox:SetTexCoord(0.07,0.93,0.08,0.93)
+
 		e.o[e.num], PunschEditFrames["MirrorEvents"][name] = Punsch_Options_EditFrame_CreateEditTextOption(e,"Icon", function () 
+			Iconbox:SetTexture(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].icon)
 			return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].icon
 		end, function (s)
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].icon = s
+			Iconbox:SetTexture(s)
 		end)
 		PunschEditFrames["MirrorEvents"][name]:SetPoint("TOPLEFT", e, "TOPLEFT",1,-e.num * 14)
+		PunschEditFrames["MirrorEvents"][name]:SetPoint("RIGHT", e, "RIGHT",-30,0)
+
+		Iconbox:SetPoint("BOTTOMLEFT", PunschEditFrames["MirrorEvents"][name], "BOTTOMRIGHT",0.5,0)
+		Iconbox:SetPoint("TOPRIGHT", PunschEditFrames["MirrorEvents"][name], "TOPRIGHT",29.5,14)
 
 		e.num = e.num + 2;
 	end
