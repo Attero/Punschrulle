@@ -168,10 +168,10 @@ Punsch_Tables_ProfilePresets = {
 					Point = "TOPLEFT"
 				},
 				Bg = {
-					r = 0.45,
-					g = 0.45,
-					b = 0.45,
-					a = 0
+					r = 0,
+					g = 0,
+					b = 0,
+					a = 1
 				},
 				Fill = {
 					r = 0.54,
@@ -198,6 +198,8 @@ Punsch_Tables_ProfilePresets = {
 				ShowTextureOnFullBar = true,
 				StretchTexture = false,
 				Decimals = 1,
+
+				BorderEncompassIcon = false,
 
 				ShowIcon = true,
 				IconPadding = 1,
@@ -398,6 +400,8 @@ Punsch_Tables_ProfilePresets = {
 				ShowTextureOnFullBar = false;
 				StretchTexture = false,
 				Decimals = 1,
+
+				BorderEncompassIcon = false,
 
 				ShowIcon = true,
 				IconPadding = 1,

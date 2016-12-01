@@ -29,6 +29,7 @@ PunschrulleTextures = {
 	Armory = "Interface\\AddOns\\Punschrulle\\media\\textures\\Armory",
 	BantoBar = "Interface\\AddOns\\Punschrulle\\media\\textures\\BantoBar",
 	Bars = "Interface\\AddOns\\Punschrulle\\media\\textures\\Bars",
+	Blizzard = "Interface\\TargetingFrame\\UI-StatusBar",
 	Dabs = "Interface\\AddOns\\Punschrulle\\media\\textures\\Dabs",
 	Diagonal = "Interface\\AddOns\\Punschrulle\\media\\textures\\Diagonal",
 	Frost = "Interface\\AddOns\\Punschrulle\\media\\textures\\Frost",

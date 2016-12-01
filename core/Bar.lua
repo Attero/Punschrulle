@@ -19,7 +19,9 @@ function Punsch_Bar_Create(e,db)
 	e.icon:SetWidth(e.self:GetHeight())
 	e.icon:SetHeight(e.self:GetHeight())
 
-	e.spark = e.ContentFrame:CreateTexture(nil,"OVERLAY")
+	e.sparkFrame = CreateFrame("Frame",nil,e.ContentFrame)
+	e.sparkFrame:SetFrameStrata("DIALOG")
+	e.spark = e.sparkFrame:CreateTexture(nil,"OVERLAY")
 	e.spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 	e.spark:SetBlendMode("ADD")
 	e.spark:SetPoint("CENTER",e.selfFill,"RIGHT")
@@ -85,6 +87,12 @@ function Punsch_Bar_Update(e,db)
 		e.icon:SetAlpha(0)
 		e.self:SetWidth(db.Width)
 	end
+
+	if db.Border.Show and db.BorderEncompassIcon and e.ShowIcon then
+		e.BorderFrame:SetPoint("TOPLEFT",e.icon,"TOPLEFT",-db.Border.Padding,db.Border.Padding)
+		e.BorderFrame:SetPoint("BOTTOMRIGHT",e.ContentFrame,"BOTTOMRIGHT",db.Border.Padding,-db.Border.Padding)
+	end
+
 
 	if db.Frame.Enable then
 		e.FramingFrame:Show()

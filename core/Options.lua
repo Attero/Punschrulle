@@ -467,6 +467,13 @@ function Punschrulle_Options_TextureFrame_Show(getter,setter)
 			btn.bg:SetTexture(Punschrulle_GetTexture(i))
 			btn.bg:SetAllPoints(btn.f)
 
+			btn.txt = btn.f:CreateFontString(nil,"OVERLAY")
+			btn.txt:SetFont(GameFontNormal:GetFont(), 12)
+			btn.txt:SetShadowColor(0,0,0,1)
+			btn.txt:SetShadowOffset(0.8,-0.8)
+			btn.txt:SetText(i)
+			btn.txt:SetPoint("CENTER",btn.f)
+
 			btn.Texture = i
 
 			num = num + 1
@@ -1142,6 +1149,12 @@ function Punsch_Options_EditCastbar_Create()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Border.OnTop
 	end, function (s)
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Border.OnTop = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Encompass icon", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].BorderEncompassIcon
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].BorderEncompassIcon = s
 	end)
 
 	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Size", function ()
@@ -1990,6 +2003,12 @@ function Punsch_Options_EditMirror_Create()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Border.OnTop
 	end, function (s)
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].Border.OnTop = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Encompass icon", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].BorderEncompassIcon
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"].BorderEncompassIcon = s
 	end)
 
 	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Size", function ()

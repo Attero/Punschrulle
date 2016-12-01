@@ -129,11 +129,7 @@ function Punsch_Castbar_Update(e)
 	end
 	e.text3:SetTextColor(db.TextDelay.r,db.TextDelay.g,db.TextDelay.b,db.TextDelay.a)
 	e.text3:SetShadowColor(db.TextDelay.sr,db.TextDelay.sg,db.TextDelay.sb,db.TextDelay.sa)
-
-	--needed for shadowoffset to properly update.
-	local t = e.text3:GetText()
-	e.text3:SetText("")	
-	e.text3:SetText(t)
+	e.text3:SetText("+0.0")
 
 	e.lagtxt:SetFont(Punschrulle_GetFont(db.TextLag.Font), db.TextLag.FontSize)
 	e.lagtxt:SetShadowOffset(db.TextLag.FontShadowX,db.TextLag.FontShadowY)
