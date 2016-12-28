@@ -63,6 +63,8 @@ function Punsch_Entity_Update(e,db)
 		Punsch_Castbar_Update(e)
 	elseif e.Type == "Mirror" then
 		Punsch_Mirror_UpdateMirrors(e)
+	elseif e.Type == "ECB" then
+		Punsch_ECB_UpdateECBs(e)
 	end
 end
 

@@ -27,6 +27,8 @@ function Punsch_Option_CreateWindows()
 	Punsch_Options_EditMirror_Create()
 	Punsch_Options_EditMirrorText_Create() 
 	Punsch_Options_EditMirrorEvents_Create()
+	--Punsch_Options_EditECB_Create()
+	--Punsch_Options_EditECBText_Create() 
 
 	--Create lock button
 	local btn = CreateFrame("Button",nil,PunschOptionWindow.Handle);
@@ -370,8 +372,10 @@ function Punschrulle_Options_FontFrame_Show(getter,setter)
 		num = num + 1
 		Buttons["Gamefont"] = btn
 
-
-		for i,_ in pairs(PunschrulleFonts) do
+    	local sortedFonts = {}
+   	 	for n in pairs(PunschrulleFonts) do table.insert(sortedFonts, n) end
+    	table.sort(sortedFonts)
+    	for _,i in ipairs(sortedFonts) do
 			local btn = {}
 			btn.f = CreateFrame("Button",nil,content);
 			btn.f:SetHeight(13)
@@ -456,7 +460,11 @@ function Punschrulle_Options_TextureFrame_Show(getter,setter)
 		local h,content = Punschrulle_Options_Mediapicker_Create()
 		local num = 0
 		local Buttons = {}
-		for i,_ in pairs(PunschrulleTextures) do
+
+		local sortedTextures = {}
+   	 	for n in pairs(PunschrulleTextures) do table.insert(sortedTextures, n) end
+    	table.sort(sortedTextures)
+    	for _,i in ipairs(sortedTextures) do
 			local btn = {}
 			btn.f = CreateFrame("Button",nil,content);
 			btn.f:SetHeight(13)
@@ -564,7 +572,12 @@ function Punsch_Options_EditFrame_CreateCheckBoxOption(parent,optionText,getter,
 	end)
 
 	local updateOption = function ()
-		checkbox:SetChecked(getter())
+		local v = getter()
+		if v then 
+			checkbox:SetChecked(v)
+		else
+			checkbox:SetChecked(false)
+		end
 	end
 
 	parent.num = parent.num + 1;
@@ -1288,6 +1301,12 @@ function Punsch_Options_EditCastbarText_Create()
 		Punsch_Entity_UpdateAll()
 	end)
 
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Uppercase spellname", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].UpperCaseSpellName
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].UpperCaseSpellName = s
+	end)
+
 	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Font Size", function ()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].TextLeft.FontSize
 	end, function (s)
@@ -1372,6 +1391,24 @@ function Punsch_Options_EditCastbarText_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].TextLeft.sg = g
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].TextLeft.sb = b
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].TextLeft.sa = a
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Spell Rank", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowRank
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowRank = s
+	end)
+
+		e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Rank as Roman", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].RankAsRoman
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].RankAsRoman = s
+	end)
+
+			e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Shorten Rank", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].RankAsShort
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].RankAsShort = s
 	end)
 
 	Punsch_Options_EditFrame_CreateHeaderOption(e,"Duration text")
@@ -2315,11 +2352,15 @@ function Punsch_Options_EditMirrorEvents_Create()
 		Iconbox:SetTexCoord(0.07,0.93,0.08,0.93)
 
 		e.o[e.num], PunschEditFrames["MirrorEvents"][name] = Punsch_Options_EditFrame_CreateEditTextOption(e,"Icon", function () 
-			Iconbox:SetTexture(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].icon)
+			if not Iconbox:SetTexture(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].icon) then
+				Iconbox:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+			end
 			return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].icon
 		end, function (s)
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][n].icon = s
-			Iconbox:SetTexture(s)
+			if not Iconbox:SetTexture(s) then
+				Iconbox:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+			end
 		end)
 		PunschEditFrames["MirrorEvents"][name]:SetPoint("TOPLEFT", e, "TOPLEFT",1,-e.num * 14)
 		PunschEditFrames["MirrorEvents"][name]:SetPoint("RIGHT", e, "RIGHT",-30,0)
@@ -2338,4 +2379,487 @@ function Punsch_Options_EditMirrorEvents_Create()
 
 	e:SetScript("OnShow",PunschEditFrames["MirrorEvents"].update)
 	PunschEditFrames["MirrorEvents"].Handle:Hide()
+end
+
+function Punsch_Options_EditECB_Create() 
+	PunschEditFrames["ECB"] = {}
+	PunschEditFrames["ECB"].Handle,PunschEditFrames["ECB"].ChildHandle = Punsch_Options_EditFrame_Create("ECB") 
+	local e = PunschEditFrames["ECB"].ChildHandle
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Always Show ECB", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].AlwaysShow
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].AlwaysShow = s
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Position")
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Width", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Width
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Width = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Height", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Height
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Height = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Padding", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Padding
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Padding = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Grow Up", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].GrowUp
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].GrowUp = s
+	end)
+
+	local anchorp = Punsch_Options_EditFrame_CreateAnchorDropDownOption(e,"Anchor point",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.Point
+	end,function(s) 
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.Point = s
+		Punsch_Entity_UpdateToNewAnchor(PunschEntities["ECB"],PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"])
+		PunschEditFrames["ECB"].update()
+	end)
+	e.o[e.num-1] = function ()
+		UIDropDownMenu_SetText(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.Point,anchorp)
+	end
+
+	local anchorrp = Punsch_Options_EditFrame_CreateAnchorDropDownOption(e,"Relative Anchor Point",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.rPoint
+	end,function(s) 
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.rPoint = s
+		Punsch_Entity_UpdateToNewAnchor(PunschEntities["ECB"],PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"])
+		PunschEditFrames["ECB"].update()
+	end)
+	e.o[e.num-1] = function ()
+		UIDropDownMenu_SetText(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.rPoint,anchorrp)
+	end
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"X", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.X
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.X = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Y", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.Y
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Anchor.Y = s
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Appearance")
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Background Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Bg.a = a
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateTexturePickerOption(e,"Bar Texture",function()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Texture
+	end,function(s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Texture = s
+		PunschEditFrames["ECB"].update()
+		Punsch_Entity_UpdateAll()
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Stretch Texture", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].StretchTexture
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].StretchTexture = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Texture on full bar", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].ShowTextureOnFullBar
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].ShowTextureOnFullBar = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Icon", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].ShowIcon
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].ShowIcon = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Icon Padding", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].IconPadding
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].IconPadding = s
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Spark")
+
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Spark", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.Enable
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.Enable = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Height", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.Height
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.Height = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Width", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.Width
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.Width = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Spark.a = a
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Frame")
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Frame", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Enable
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Enable = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Thickness", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Thickness
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Thickness = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Inner Border Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.InnerBorderSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.InnerBorderSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Outer Border Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.OuterBorderSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.OuterBorderSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.a = a
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Border Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Borderr,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Borderg,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Borderb,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Bordera
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Borderr = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Borderg = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Borderb = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Frame.Bordera = a
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Border")
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Border", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.Show
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.Show = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Border on Top", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.OnTop
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.OnTop = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Encompass icon", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].BorderEncompassIcon
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].BorderEncompassIcon = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.Size
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.Size = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Padding", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.Padding
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.Padding = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Border.a = a
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Fading")
+
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Enable Fading", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Fade.Enable
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Fade.Enable = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Fadetime", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Fade.Time
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Fade.Time = s
+	end)
+
+	PunschEditFrames["ECB"].update = function ()
+		for _,update in pairs(e.o) do
+			update()
+		end
+	end
+
+	e:SetScript("OnShow",PunschEditFrames["ECB"].update)
+	PunschEditFrames["ECB"].Handle:Hide()
+end
+
+function Punsch_Options_EditECBText_Create() 
+	PunschEditFrames["ECBText"] = {}
+	PunschEditFrames["ECBText"].Handle,PunschEditFrames["ECBText"].ChildHandle = Punsch_Options_EditFrame_Create("ECB Text") 
+	local e = PunschEditFrames["ECBText"].ChildHandle
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Decimals Displayed", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Decimals
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].Decimals = s
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Spellname Text")
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateFontPickerOption(e,"Font",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Font
+	end,function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Font = s
+		PunschEditFrames["ECBText"].update()
+		Punsch_Entity_UpdateAll()
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Font Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.FontSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.FontSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Font Shadow X Offset", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.FontShadowX
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.FontShadowX = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Font Shadow Y Offset", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.FontShadowY
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.FontShadowY = s
+	end)
+
+	local anchorsn = Punsch_Options_EditFrame_CreateAnchorDropDownOption(e,"Anchor Point",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Point
+	end,function(s) 
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Point = s
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.X,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Y = Punsch_Entity_GetRelativePoint(
+		PunschEntities["ECB"].text1,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Point,
+		PunschEntities["ECB"].self,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.rPoint)
+		PunschEditFrames["ECB"].update()
+	end)
+	e.o[e.num-1] = function ()
+		UIDropDownMenu_SetText(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Point,anchorsn)
+	end	
+
+	local anchorrsn = Punsch_Options_EditFrame_CreateAnchorDropDownOption(e,"Anchor Relative Point",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.rPoint
+	end,function(s) 
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.rPoint = s
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.X,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Y = Punsch_Entity_GetRelativePoint(
+		PunschEntities["ECB"].text1,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Point,
+		PunschEntities["ECB"].self,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.rPoint)
+		PunschEditFrames["ECB"].update()
+	end)
+	e.o[e.num-1] = function ()
+		UIDropDownMenu_SetText(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.rPoint,anchorrsn)
+	end	
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"X", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.X
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.X = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Y", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Y
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.Y = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.a = a
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Shadow Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sr,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sg,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sb,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sa
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sr = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sg = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sb = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextLeft.sa = a
+	end)
+
+	Punsch_Options_EditFrame_CreateHeaderOption(e,"Duration text")
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateFontPickerOption(e,"Font",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Font
+	end,function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Font = s
+		PunschEditFrames["ECBText"].update()
+		Punsch_Entity_UpdateAll()
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Font Size", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.FontSize
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.FontSize = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Font Shadow X Offset", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.FontShadowX
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.FontShadowX = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Font Shadow Y Offset", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.FontShadowY
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.FontShadowY = s
+	end)
+
+	local anchord = Punsch_Options_EditFrame_CreateAnchorDropDownOption(e,"Anchor Point",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Point
+	end,function(s) 
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Point = s
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.X,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Y = Punsch_Entity_GetRelativePoint(
+		PunschEntities["ECB"].text2,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Point,
+		PunschEntities["ECB"].self,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.rPoint)
+		PunschEditFrames["ECB"].update()
+	end)
+	e.o[e.num-1] = function ()
+		UIDropDownMenu_SetText(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Point,anchord)
+	end	
+
+	local anchorrd = Punsch_Options_EditFrame_CreateAnchorDropDownOption(e,"Anchor Relative Point",function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.rPoint
+	end,function(s) 
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.rPoint = s
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.X,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Y = Punsch_Entity_GetRelativePoint(
+		PunschEntities["ECB"].text2,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Point,
+		PunschEntities["ECB"].self,
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.rPoint)
+		PunschEditFrames["ECB"].update()
+	end)
+	e.o[e.num-1] = function ()
+		UIDropDownMenu_SetText(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.rPoint,anchorrd)
+	end	
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"X", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.X
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.X = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateEditNumberOption(e,"Y", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Y
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.Y = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.r,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.g,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.b,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.a
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.r = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.g = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.b = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.a = a
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_ColorPickerOption(e,"Shadow Color", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sr,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sg,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sb,
+			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sa
+	end, function (r,g,b,a)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sr = r
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sg = g
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sb = b
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["ECB"].TextRight.sa = a
+	end)
+
+	PunschEditFrames["ECBText"].update = function ()
+		for _,update in pairs(e.o) do
+			update()
+		end
+	end
+
+	e:SetScript("OnShow",PunschEditFrames["ECBText"].update)
+
+	PunschEditFrames["ECBText"].Handle:Hide()
 end

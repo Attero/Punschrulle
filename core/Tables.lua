@@ -270,6 +270,11 @@ Punsch_Tables_ProfilePresets = {
 
 				--Castbar
 
+				ShowRank = false,
+				RankAsRoman = true,
+				RankAsShort = true,
+				UpperCaseSpellName = false,
+
 				CountUpOnCast = true,
 				CountUpOnChannel = false,
 
@@ -548,8 +553,26 @@ Punsch_Tables_ProfilePresets = {
 						a = 1,
 						icon = "Interface\\Icons\\Spell_Shadow_Twilight"
 					},
+					GAMESTART = {
+						label = "Game Start",
+						enable = true,
+						r = 0,
+						g = 1,
+						b = 0,
+						a = 1,
+						icon = "Interface\\Icons\\Ability_DualWield"
+					},
+					WSG_FLAGRESPAWN = {
+						label = "Flag respawn",
+						enable = true,
+						r = 0,
+						g = 1,
+						b = 0,
+						a = 1,
+						icon = "Interface\\Icons\\Ability_DualWield"
+					},
 				}
-			}
+			},
 		}
 	},
 }

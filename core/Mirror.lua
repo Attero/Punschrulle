@@ -53,6 +53,12 @@ function Punsch_Mirror_Create()
 	StaticPopupDialogs["CONFIRM_SUMMON"].OnHide = function ()
 		Punsch_Mirror_OnEventStop(PunschMirrorEvents["SUMMON"])
 	end
+
+	--bg timers
+	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_NEUTRAL");
+	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_ALLIANCE");
+	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_HORDE");
+	e.self:RegisterEvent("PLAYER_ENTERING_WORLD");
 end
 
 --updates the bars to the current state of the db
@@ -189,8 +195,44 @@ function Punsch_Mirror_OnEvent()
    	--	DEFAULT_CHAT_FRAME:AddMessage(event) 
    	--	if debugMirror then DEFAULT_CHAT_FRAME:AddMessage(event) end
    	--	Punsch_Mirror_OnEventStop(PunschMirrorEvents["SUMMON"])
-   	else
-   		DEFAULT_CHAT_FRAME:AddMessage("UNHANDLED EVENT: " ..event)
+   	elseif (event == "CHAT_MSG_BG_SYSTEM_NEUTRAL") then
+   		if debugMirror then DEFAULT_CHAT_FRAME:AddMessage(event .. " '" .. arg1 .. "'") end
+   		if not PunschMirrorEvents["GAMESTART"] then
+    		PunschMirrorEvents["GAMESTART"] = {}
+    		PunschMirrorEvents["GAMESTART"].name = "GAMESTART"
+    		PunschMirrorEvents["GAMESTART"].max = 60000
+    		PunschMirrorEvents["GAMESTART"].step = -1
+    	end
+    	if strfind(arg1,"1 minute") then
+	    	PunschMirrorEvents["GAMESTART"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["GAMESTART"].label
+	    	PunschMirrorEvents["GAMESTART"].value = 60000
+	    	Punsch_Mirror_AssignFirstUnassignedEvent(PunschMirrorEvents["GAMESTART"])
+   		elseif strfind(arg1,"30 seconds") then
+	    	PunschMirrorEvents["GAMESTART"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["GAMESTART"].label
+	    	PunschMirrorEvents["GAMESTART"].value = 30000
+	    	Punsch_Mirror_AssignFirstUnassignedEvent(PunschMirrorEvents["GAMESTART"])
+	    elseif strfind(arg1,"Let the battle for") then 
+	    	Punsch_Mirror_OnEventStop(PunschMirrorEvents["GAMESTART"])
+	    elseif strfind(arg1,"The flags are now placed at their bases.") then 
+	    	Punsch_Mirror_OnEventStop(PunschMirrorEvents["WSG_FLAGRESPAWN"])
+	    else
+	    	DEFAULT_CHAT_FRAME:AddMessage("unhandled " .. event .. " '" .. arg1 .. "'")
+   		end
+   	elseif (event == "CHAT_MSG_BG_SYSTEM_ALLIANCE") or (event == "CHAT_MSG_BG_SYSTEM_HORDE") then
+		if strfind(arg1,"(%S+) captured the (%S+) flag!") then 
+			if not PunschMirrorEvents["WSG_FLAGRESPAWN"] then
+	    		PunschMirrorEvents["WSG_FLAGRESPAWN"] = {}
+	    		PunschMirrorEvents["WSG_FLAGRESPAWN"].name = "WSG_FLAGRESPAWN"
+	    		PunschMirrorEvents["WSG_FLAGRESPAWN"].max = 23000
+	    		PunschMirrorEvents["WSG_FLAGRESPAWN"].step = -1
+	    	end
+		   	PunschMirrorEvents["WSG_FLAGRESPAWN"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["WSG_FLAGRESPAWN"].label
+	    	PunschMirrorEvents["WSG_FLAGRESPAWN"].value = PunschMirrorEvents["WSG_FLAGRESPAWN"].max
+	    	Punsch_Mirror_AssignFirstUnassignedEvent(PunschMirrorEvents["WSG_FLAGRESPAWN"])
+		end
+	elseif (event == "PLAYER_ENTERING_WORLD") then
+		Punsch_Mirror_OnEventStop(PunschMirrorEvents["GAMESTART"])
+		Punsch_Mirror_OnEventStop(PunschMirrorEvents["WSG_FLAGRESPAWN"])
     end
 end
 
@@ -212,7 +254,9 @@ function Punsch_Mirror_AssignEvent(e,event)
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].g,
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].b,
 			PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].a)
-		e.icon:SetTexture(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].icon)
+		if not e.icon:SetTexture(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"][event.name].icon) then
+			e.icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+		end
 		e.text1:SetText(event.label)
 		if PunschEntities["Mirror"].ShowSpark then e.spark:Show() end
 		e.ContentFrame:Show();

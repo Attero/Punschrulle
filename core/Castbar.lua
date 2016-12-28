@@ -78,6 +78,10 @@ function Punsch_Castbar_Create()
 	--e.self:RegisterEvent("UNIT_MANA")
 end
 
+local RomanNumerals = {
+	"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII"
+}
+
 function Punsch_Castbar_Update(e)
 	local db = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"]
 
@@ -109,6 +113,11 @@ function Punsch_Castbar_Update(e)
 	e.TickWidth = db.Tick.Width
 	e.TickTop =  db.Tick.TopAnchor
 	e.TickBot = db.Tick.BotAnchor
+
+	e.ShowRank = db.ShowRank
+	e.RankAsRoman =db.RankAsRoman
+	e.RankAsShort = db.RankAsShort
+	e.UCSN = db.UpperCaseSpellName
 
 	e.fadeTolerance = db.Fade.Tolerance;
 	e.fadesht = db.Fade.SuccessHoldTime;
@@ -268,6 +277,7 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 		e.LastSpellSetOnLoseIsTargeting = nil
 		e.LastSpellLocalCast = nil
 		e.LastSpellIcon = nil
+		e.LastSpellRank = nil
 		e.OriginalUseAction(slot,checkCursor,onSelf)
 	else
 		e.OriginalUseAction(slot,checkCursor,onSelf)
@@ -276,25 +286,24 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 
 	--detecting Aimed Shot
 	if IsCurrentAction(slot) then 
-		Punsch_Castbar_Tooltip:ClearLines();
+		Punsch_Castbar_TooltipTextLeft1:SetText();
+		Punsch_Castbar_TooltipTextRight1:SetText();
 		Punsch_Castbar_Tooltip:SetAction(slot);
 		local spellName = Punsch_Castbar_TooltipTextLeft1:GetText();
 		if ( spellName == "Aimed Shot" )  then
 			Punsch_Castbar_CastAimedShot()
 		end
-	end
-
-	--lag
-	if IsCurrentAction(slot) and not IsAttackAction(slot) then
-		if SpellIsTargeting() then -- await next gcd, should happen when player has set a target
-			e.LastUseActionSlot = slot
+		--lag, icons, rank
+		if not IsAttackAction(slot) then
+			e.LastSpellRank = Punsch_Castbar_TooltipTextRight1:GetText()
 			e.LastSpellIcon = GetActionTexture(slot)
-			e.LastSpellSetOnLoseIsTargeting = true
-		else --tentatively keep it until next spellcast or slot is no longer "IsCurrentAction"
-			e.LastSpellLocalCast = GetTime()
-			e.LastSpellIcon = GetActionTexture(slot)
-			e.LastSpellDropOnLoseIsCurrentAction = true
 			e.LastUseActionSlot = slot
+			if SpellIsTargeting() then -- await next gcd, should happen when player has set a target
+				e.LastSpellSetOnLoseIsTargeting = true
+			else --tentatively keep it until next spellcast or slot is no longer "IsCurrentAction"
+				e.LastSpellLocalCast = GetTime()
+				e.LastSpellDropOnLoseIsCurrentAction = true
+			end
 		end
 	end
 end
@@ -305,6 +314,7 @@ function Punsch_Castbar_HookCastSpell(spellID, spellTab)
 	e.LastSpellSetOnLoseIsTargeting = nil
 	e.LastSpellLocalCast = nil
 	e.LastSpellIcon = nil
+	e.LastSpellRank = nil
 	--detecting Aimed Shot
 	if GetSpellName(spellID, spellTab) == "Aimed Shot" then
 		Punsch_Castbar_CastAimedShot()
@@ -341,11 +351,13 @@ function Punsch_Castbar_GetLastSpellInfo()
 	if e.LastSpellLocalCast then
 		local lag = GetTime() - e.LastSpellLocalCast
 		local icon = e.LastSpellIcon
+		local rank = e.LastSpellRank
 		e.LastSpellLocalCast = nil
 		e.LastSpellIcon = nil
+		e.LastSpellRank = nil
 		e.LastSpellDropOnLoseIsCurrentAction = nil
 		e.LastSpellSetOnLoseIsTargeting = nil
-		return lag, icon
+		return lag, icon, rank
 	end
 end
 
@@ -355,6 +367,7 @@ function Punsch_Castbar_OnUpdate()
 		if not IsCurrentAction(e.LastUseActionSlot) then
 			e.LastSpellLocalCast = nil
 			e.LastSpellIcon = nil
+			e.LastSpellRank = nil
 			e.LastSpellDropOnLoseIsCurrentAction = nil
 		end
 	elseif e.LastSpellSetOnLoseIsTargeting  then
@@ -392,7 +405,7 @@ function Punsch_Castbar_OnUpdate()
 		end
 		--gradually hide ticks
 		for i=1,e.TicksShown do
-			if e.TickIndicators[i].texture:GetLeft() > e.selfFill:GetRight() then	--ERROR HERE
+			if e.TickIndicators[i].texture:GetLeft() > e.selfFill:GetRight() then	--ERROR HERE when channeling supposedly.
 				e.TickIndicators[i].texture:Hide()
 			elseif e.TickIndicators[i].texture:GetRight() > e.selfFill:GetRight() then
 				local w = e.TickIndicators[i].texture:GetWidth() -(e.TickIndicators[i].texture:GetRight() - e.selfFill:GetRight())
@@ -445,7 +458,7 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 	e.selfFill:Show();
 	if e.ShowSpark then e.spark:Show() end
 
-	e.lag, e.icontexture = Punsch_Castbar_GetLastSpellInfo() 
+	e.lag, e.icontexture, e.rank = Punsch_Castbar_GetLastSpellInfo() 
 	if e.lag and e.ShowLag then
 		if e.lag < 0.001 then
 			e.lagBG:Hide()
@@ -528,9 +541,24 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 			end
 		end
 	end
+	
+	--spellname text formatting and ranks
+	local spellNameText = e.spellName
+	if e.rank and e.ShowRank then
+		local _,_,r = strfind(e.rank,"Rank (%S+)")
+		if r then
+			if e.RankAsRoman then r = RomanNumerals[tonumber(r)] end
+			if not e.RankAsShort then 
+				spellNameText = spellNameText .. " Rank " .. r 
+			else
+				spellNameText = spellNameText .. " " .. r
+			end
+		end
+	end
+	if e.UCSN then spellNameText = strupper(spellNameText) end
+	e.text1:SetText(spellNameText);
 
 	e.icontexture = nil
-	e.text1:SetText(e.spellName);
 	e.text2:SetText(0.0 .."/" .. e.duration, 1);
 	e.text3:SetText("")
 	e.ContentFrame:Show();
@@ -617,7 +645,6 @@ function Punsch_Castbar_OnCastStart(name,duration)
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fill.a)
 	e.selfFill:Hide();
 	e.selfFillShown = false;
-	e.text1:SetText(name);
 	e.text2:SetText(0.0 .."/" .. e.duration, 1);
 	e.text3:SetText("")
 
@@ -635,8 +662,24 @@ function Punsch_Castbar_OnCastStart(name,duration)
 		e.icontexture = "Interface\\Icons\\INV_Spear_07"
 		e.lag = nil
 	else
-		e.lag, e.icontexture = Punsch_Castbar_GetLastSpellInfo() 
+		e.lag, e.icontexture, e.rank = Punsch_Castbar_GetLastSpellInfo() 
 	end
+
+	--spellname text formatting and ranks
+	local spellNameText = e.spellName
+	if e.rank and e.ShowRank then
+		local _,_,r = strfind(e.rank,"Rank (%S+)")
+		if r then
+			if e.RankAsRoman then r = RomanNumerals[tonumber(r)] end
+			if not e.RankAsShort then 
+				spellNameText = spellNameText .. " Rank " .. r 
+			else
+				spellNameText = spellNameText .. " " .. r
+			end
+		end
+	end
+	if e.UCSN then spellNameText = strupper(spellNameText) end
+	e.text1:SetText(spellNameText);
 
 	if e.lag and e.ShowLag then
 		--DEFAULT_CHAT_FRAME:AddMessage("lag: " .. e.lag .. "dur:" .. e.duration .. "q" ..);

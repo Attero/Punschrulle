@@ -29,12 +29,14 @@ function Punschrulle_OnEvent()
 			end
 			Punsch_Castbar_Create()
 			Punsch_Mirror_Create()
+			--Punsch_ECB_Create()
 			Punsch_Entity_UpdateAll()
 		end
 	end
 end
 
 function Punschrulle_Command(msg)
+	msg = strlower(msg)
 	local cmd, subCmd = Punschrulle_GetCmd(msg);
 	if(cmd=="lock") then
 		Punsch_Entity_ToggleLock();
@@ -54,7 +56,7 @@ end
 ManaTickTest:
 This is a test designed to ensure the mana tickrate of the server is correct. Stock MANGoS is broken.
 Usage: Empty your manapool, type /punsch test. 
-If total error is around 0 at the point when you reach a full mana pool, the server is decent and evocation channelticks work.
+If total error is around 0 at the point when you reach a full mana pool, the server is decent and evocation channelticks can be made to work. (they arent implemented atm tho)
 --]]
 function ManaTickTest()
 	if not ManaTestStartTest then
