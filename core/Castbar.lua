@@ -132,7 +132,8 @@ function Punsch_Castbar_Update(e)
 	e.fadeTolerance = db.Fade.Tolerance;
 	e.fadesht = db.Fade.SuccessHoldTime;
 	e.fadefht = db.Fade.FailureHoldTime;
-	e.PlayerInterruptAsFailure = PlayerInterruptAsFailure;
+	e.PlayerInterruptAsFailure = db.PlayerInterruptAsFailure;
+	e.fadeshowlag = db.Fade.ShowLagWhileFading;
 
 	e.CountUpOnChannel = db.CountUpOnChannel;
 	e.CountUpOnCast = db.CountUpOnCast;
@@ -814,6 +815,7 @@ function Punsch_Castbar_StartFade(successful)
 		end
 		Punsch_Bar_SetPercent(e,0,1)
 		if e.ShowSpark then e.spark:Hide() end
+		if not e.fadeshowlag then e.lagBG:Hide() end
 	end
 end
 

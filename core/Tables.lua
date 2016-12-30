@@ -352,6 +352,7 @@ Punsch_Tables_ProfilePresets = {
 					PlayerInterruptAsFailure = true,
 					FailureHoldTime = 0,
 					SuccessHoldTime = 0,
+					ShowLagWhileFading = false,
 					Success = {
 						r = 0.2,
 						g = 0.6,

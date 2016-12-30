@@ -1751,6 +1751,12 @@ function Punsch_Options_EditFading_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.OnChannel = s
 	end)
 
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Lag While Fading", function () 
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.ShowLagWhileFading
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.ShowLagWhileFading = s
+	end)
+
 	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Interrupted by self = Failure", function () 
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.PlayerInterruptAsFailure
 	end, function (s)
