@@ -27,6 +27,12 @@ function Punsch_Castbar_Create()
 	e.delayedBy = 0;
 	e.fadeTimeleft = 0;
 
+	--keeps track of max spellranks
+	e.spellDB = {}
+
+	--keeps track of recently cast spells to provide icons and ranks in macros/spellbook
+	e.recentlyCastSpells = {}
+
 	--initializing ranged haste for aimedshot workaround
 	e.HasteFromBerserking = 1
 	e.HasteFromQuickShots = 1
@@ -70,6 +76,10 @@ function Punsch_Castbar_Create()
 	e.self:RegisterEvent("SPELLCAST_INTERRUPTED")
 	e.self:RegisterEvent("SPELLCAST_START")
 	e.self:RegisterEvent("SPELLCAST_STOP")
+	
+	--keeps track of spellbook changes for macro icon/ranks
+	e.self:RegisterEvent("SPELLS_CHANGED")
+
 	--keeps track of buffs on self
 	e.self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
 	e.self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS")
@@ -220,6 +230,7 @@ function Punsch_Castbar_OnEvent()
     elseif (event == "SPELLCAST_STOP") then
     	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("SPELLCAST_STOP") end
     	Punsch_Castbar_OnCastStop()
+    	PunschEntities["Castbar"].recentlyCastSpells = {}
     elseif (event == "CHAT_MSG_SPELL_AURA_GONE_SELF") then
     	local buffName = strsub(arg1,0, -17)
     	if debugCastbar then DEFAULT_CHAT_FRAME:AddMessage("CHAT_MSG_SPELL_AURA_GONE_SELF '" .. buffName .. "'") end
@@ -255,6 +266,10 @@ function Punsch_Castbar_OnEvent()
     	PunschEntities["Castbar"].HasteFromQuickShots = 1
     	PunschEntities["Castbar"].HasteFromKiss = 1
     	PunschEntities["Castbar"].HasteFromRapid = 1
+    elseif (event == "SPELLS_CHANGED") then
+    	PunschEntities["Castbar"].spellDB = {}
+    else 	
+    	DEFAULT_CHAT_FRAME:AddMessage("unhandled: " .. event .. ", " .. tostring(arg1).. tostring(arg2).. tostring(arg3).. tostring(arg4))
 	end
 end
 
@@ -286,17 +301,24 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 
 	--detecting Aimed Shot
 	if IsCurrentAction(slot) then 
-		Punsch_Castbar_TooltipTextLeft1:SetText();
-		Punsch_Castbar_TooltipTextRight1:SetText();
-		Punsch_Castbar_Tooltip:SetAction(slot);
-		local spellName = Punsch_Castbar_TooltipTextLeft1:GetText();
-		if ( spellName == "Aimed Shot" )  then
-			Punsch_Castbar_CastAimedShot()
+		if GetActionText(slot) == nil then
+			Punsch_Castbar_TooltipTextLeft1:SetText();
+			Punsch_Castbar_TooltipTextRight1:SetText();
+			Punsch_Castbar_Tooltip:SetAction(slot);
+			local spellName = Punsch_Castbar_TooltipTextLeft1:GetText();
+			if ( spellName == "Aimed Shot" )  then
+				Punsch_Castbar_CastAimedShot()
+			end
 		end
 		--lag, icons, rank
 		if not IsAttackAction(slot) then
-			e.LastSpellRank = Punsch_Castbar_TooltipTextRight1:GetText()
-			e.LastSpellIcon = GetActionTexture(slot)
+			if GetActionText(slot) == nil then
+				e.LastSpellRank = Punsch_Castbar_TooltipTextRight1:GetText()
+				e.LastSpellIcon = GetActionTexture(slot)
+			else
+				e.LastSpellRank = "macro"
+				e.LastSpellIcon = "macro"
+			end
 			e.LastUseActionSlot = slot
 			if SpellIsTargeting() then -- await next gcd, should happen when player has set a target
 				e.LastSpellSetOnLoseIsTargeting = true
@@ -315,8 +337,15 @@ function Punsch_Castbar_HookCastSpell(spellID, spellTab)
 	e.LastSpellLocalCast = nil
 	e.LastSpellIcon = nil
 	e.LastSpellRank = nil
+	local name,rank = GetSpellName(spellID, spellTab)
+
+	--remembers spellname to match with later casts
+	e.recentlyCastSpells[strlower(name)] = {}
+	e.recentlyCastSpells[strlower(name)].texture = GetSpellTexture(spellID, spellTab)
+	e.recentlyCastSpells[strlower(name)].rank = rank
+
 	--detecting Aimed Shot
-	if GetSpellName(spellID, spellTab) == "Aimed Shot" then
+	if name == "Aimed Shot" then
 		Punsch_Castbar_CastAimedShot()
 	end
 
@@ -329,6 +358,15 @@ function Punsch_Castbar_HookCastSpellByName(spellName)
 	--e.LastSpellSetOnLoseIsTargeting = nil
 	--e.LastSpellLocalCast = nil
 	--e.LastSpellIcon = nil
+
+	--remembers spellname to match with later casts
+	local spellInfo = Punsch_Castbar_GetSpellMaxRankInfo(spellName)
+	if spellInfo then
+		e.recentlyCastSpells[strlower(spellName)] = {}
+		e.recentlyCastSpells[strlower(spellName)].texture = spellInfo.icon
+		e.recentlyCastSpells[strlower(spellName)].rank = spellInfo.rank
+	end
+
 	--detecting Aimed Shot
 	if spellName == "Aimed Shot" then
 		Punsch_Castbar_CastAimedShot()
@@ -665,6 +703,11 @@ function Punsch_Castbar_OnCastStart(name,duration)
 		e.lag, e.icontexture, e.rank = Punsch_Castbar_GetLastSpellInfo() 
 	end
 
+	if (e.lag == nil and e.recentlyCastSpells[strlower(e.spellName)]) or (e.icontexture=="macro" and e.rank == "macro") then
+		e.icontexture = e.recentlyCastSpells[strlower(e.spellName)].texture
+		e.rank = e.recentlyCastSpells[strlower(e.spellName)].rank
+	end
+
 	--spellname text formatting and ranks
 	local spellNameText = e.spellName
 	if e.rank and e.ShowRank then
@@ -772,6 +815,26 @@ function Punsch_Castbar_StartFade(successful)
 		Punsch_Bar_SetPercent(e,0,1)
 		if e.ShowSpark then e.spark:Hide() end
 	end
+end
+
+function Punsch_Castbar_GetSpellMaxRankInfo(spellName) 
+	spellName = strlower(spellName)
+	local e = PunschEntities["Castbar"]
+	if not e.spellDB[spellName] then 
+		local i = 1
+		while true do
+			local name, rank = GetSpellName(i, "spell")
+			if not name then break end
+			if strlower(name) == spellName and strlower(GetSpellName(i+1, "spell"))~=spellName then
+				e.spellDB[spellName] = {}
+				e.spellDB[spellName].rank = rank
+				e.spellDB[spellName].icon = GetSpellTexture(i, "spell")
+				break
+			end
+			i = i + 1
+		end
+	end
+	return e.spellDB[spellName]
 end
 
 --[[
