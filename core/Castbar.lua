@@ -352,7 +352,7 @@ function Punsch_Castbar_HookCastSpell(spellID, spellTab)
 	e.OriginalCastSpell(spellID, spellTab)
 end
 
-function Punsch_Castbar_HookCastSpellByName(spellName)
+function Punsch_Castbar_HookCastSpellByName(spellName,target)
 	local e = PunschEntities["Castbar"]
 	--e.LastSpellDropOnLoseIsCurrentAction = nil
 	--e.LastSpellSetOnLoseIsTargeting = nil
@@ -372,7 +372,7 @@ function Punsch_Castbar_HookCastSpellByName(spellName)
 		Punsch_Castbar_CastAimedShot()
 	end
 
-	e.OriginalCastSpellByName(spellName)
+	e.OriginalCastSpellByName(spellName,target)
 end
 
 function Punsch_Castbar_CastAimedShot()
