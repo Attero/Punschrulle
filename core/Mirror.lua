@@ -216,7 +216,7 @@ function Punsch_Mirror_OnEvent()
 	    elseif strfind(arg1,"The flags are now placed at their bases.") then 
 	    	Punsch_Mirror_OnEventStop(PunschMirrorEvents["WSG_FLAGRESPAWN"])
 	    else
-	    	DEFAULT_CHAT_FRAME:AddMessage("unhandled " .. event .. " '" .. arg1 .. "'")
+	    	--DEFAULT_CHAT_FRAME:AddMessage("unhandled " .. event .. " '" .. arg1 .. "'")
    		end
    	elseif (event == "CHAT_MSG_BG_SYSTEM_ALLIANCE") or (event == "CHAT_MSG_BG_SYSTEM_HORDE") then
 		if strfind(arg1,"(%S+) captured the (%S+) flag!") then 
