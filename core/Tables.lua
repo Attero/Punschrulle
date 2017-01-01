@@ -481,7 +481,7 @@ Punsch_Tables_ProfilePresets = {
 				},
 
 				--Mirror
-				GrowUp = true, --I REALLY WANNA SET THIS TO FALSE
+				GrowUp = true, 
 				Padding = 1,
 				HideBlizzardBar = true,
 

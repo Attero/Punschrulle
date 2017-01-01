@@ -6,12 +6,12 @@ function Punsch_Mirror_Create()
 	PunschEntities["Mirror"] = {}
 	local e = PunschEntities["Mirror"]
 	PunschMirrors[0] = e
-	e.Type = "Mirror";
+	e.Type = "Mirror"
 	Punsch_Bar_Create(e,db)
 
 	for i=1,PunschMirrorCount do 
 		PunschMirrors[i] = {}
-		PunschMirrors[i].Type = "Mirror" .. i;
+		PunschMirrors[i].Type = "Mirror" .. i
 		Punsch_Bar_Create(PunschMirrors[i],db)
 	end
 
@@ -22,10 +22,10 @@ function Punsch_Mirror_Create()
 	e.self:RegisterEvent("MIRROR_TIMER_PAUSE")
 	e.self:RegisterEvent("MIRROR_TIMER_STOP")
 
-	e.self:RegisterEvent("PLAYER_CAMPING");
-	e.self:RegisterEvent("PLAYER_QUITING");
+	e.self:RegisterEvent("PLAYER_CAMPING")
+	e.self:RegisterEvent("PLAYER_QUITING")
 
-	--e.self:RegisterEvent("LOGOUT_CANCEL");
+	--e.self:RegisterEvent("LOGOUT_CANCEL")
 	--doesnt seem to fire, workaround below
 	local oldOnHide = StaticPopupDialogs["CAMP"].OnHide
 	StaticPopupDialogs["CAMP"].OnHide = function ()
@@ -38,11 +38,11 @@ function Punsch_Mirror_Create()
 		oldOnHide()
 	end
 
-	e.self:RegisterEvent("INSTANCE_BOOT_START");
-	e.self:RegisterEvent("INSTANCE_BOOT_STOP");
+	e.self:RegisterEvent("INSTANCE_BOOT_START")
+	e.self:RegisterEvent("INSTANCE_BOOT_STOP")
 
-	e.self:RegisterEvent("CONFIRM_SUMMON");
-	--e.self:RegisterEvent("CANCEL_SUMMON");
+	e.self:RegisterEvent("CONFIRM_SUMMON")
+	--e.self:RegisterEvent("CANCEL_SUMMON")
 
 	--hooks confirming summons
 	local oldOnAccept = StaticPopupDialogs["CONFIRM_SUMMON"].OnAccept
@@ -55,10 +55,10 @@ function Punsch_Mirror_Create()
 	end
 
 	--bg timers
-	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_NEUTRAL");
-	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_ALLIANCE");
-	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_HORDE");
-	e.self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_NEUTRAL")
+	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_ALLIANCE")
+	e.self:RegisterEvent("CHAT_MSG_BG_SYSTEM_HORDE")
+	e.self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 --updates the bars to the current state of the db
@@ -92,7 +92,7 @@ function Punsch_Mirror_UpdateMirrors(e)
 			db.Anchor.Y)
 	end
 
-	e.fadeHoldTime = db.Fade.HoldTime;
+	e.fadeHoldTime = db.Fade.HoldTime
 
 	e.GrowUp = db.GrowUp
 
@@ -259,7 +259,7 @@ function Punsch_Mirror_AssignEvent(e,event)
 		end
 		e.text1:SetText(event.label)
 		if PunschEntities["Mirror"].ShowSpark then e.spark:Show() end
-		e.ContentFrame:Show();
+		e.ContentFrame:Show()
 	else
 		if not PunschEntities["Mirror"].AlwaysShow then e.ContentFrame:Hide() end
 	end
@@ -297,12 +297,12 @@ end
 
 function Punsch_Mirror_StartFade(e) 
 	if not e.isFading then
-		e.isFading = true;
-		e.holdTime = PunschEntities["Mirror"].fadeHoldTime;
+		e.isFading = true
+		e.holdTime = PunschEntities["Mirror"].fadeHoldTime
 		if e.fadeTime == 0 then
 			e.fadeTimeLeft = 0.01
 		else
-			e.fadeTimeleft = e.fadeTime;
+			e.fadeTimeleft = e.fadeTime
 		end
 		Punsch_Bar_SetPercent(e,0,1)
 		if e.ShowSpark then e.spark:Hide() end
@@ -328,7 +328,7 @@ function Punsch_Mirror_Update(e,elapsed)
 		end
 		if e.fadeTimeleft <=0 then
 			Punsch_Bar_FadeStop(e)
-			if not e.AlwaysShow then e.ContentFrame:Hide(); end
+			if not e.AlwaysShow then e.ContentFrame:Hide() end
 			Punsch_Mirror_UnAssignEvent(e.event)
 		else
 			e.ContentFrame:SetAlpha(1- (e.fadeTime - e.fadeTimeleft) / e.fadeTime)
@@ -337,7 +337,7 @@ function Punsch_Mirror_Update(e,elapsed)
 		e.event.value = e.event.value + elapsed*1000*e.event.step
 		if e.event.value > e.event.max then e.event.value = e.event.max end
 		if e.event.value < 0 then e.event.value = 0 end
-		e.text2:SetText(string.format("%." .. e.decimals .. "f",e.event.value/1000)) --.."/" .. string.format("%." .. PunschEntities["Mirror"].decimals .. "f",e.event.max/1000))
+		e.text2:SetText(string.format("%." .. e.decimals .. "f",e.event.value/1000))
 		Punsch_Bar_SetPercent(e,0,e.event.value/e.event.max)
 	end
 end

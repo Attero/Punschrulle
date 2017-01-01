@@ -4,7 +4,7 @@ function Punsch_Castbar_Create()
 	local db = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"]
 	PunschEntities["Castbar"] = {}
 	local e = PunschEntities["Castbar"]
-	e.Type = "Castbar";
+	e.Type = "Castbar"
 	Punsch_Bar_Create(e,db)
 
 	e.text3 = e.TextFrame:CreateFontString(nil,"OVERLAY")
@@ -21,11 +21,14 @@ function Punsch_Castbar_Create()
 	e.lagtxt:SetText("0ms")
 	e.lagtxt:SetPoint("RIGHT",e.lagBG,"BOTTOMRIGHT")
 
-	e.isCasting = false;
-	e.isChannel = false;
-	e.spellName = "";
-	e.delayedBy = 0;
-	e.fadeTimeleft = 0;
+	e.Tooltip = CreateFrame("GameTooltip","Punsch_Castbar_Tooltip",UIParent,"GameTooltipTemplate")
+	e.Tooltip:SetOwner(UIParent,"ANCHOR_NONE")
+
+	e.isCasting = false
+	e.isChannel = false
+	e.spellName = ""
+	e.delayedBy = 0
+	e.fadeTimeleft = 0
 
 	--keeps track of max spellranks
 	e.spellDB = {}
@@ -132,16 +135,16 @@ function Punsch_Castbar_Update(e)
 	e.RankAsShort = db.RankAsShort
 	e.UCSN = db.UpperCaseSpellName
 
-	e.fadeTolerance = db.Fade.Tolerance;
-	e.fadesht = db.Fade.SuccessHoldTime;
-	e.fadefht = db.Fade.FailureHoldTime;
-	e.PlayerInterruptAsFailure = db.PlayerInterruptAsFailure;
-	e.fadeshowlag = db.Fade.ShowLagWhileFading;
+	e.fadeTolerance = db.Fade.Tolerance
+	e.fadesht = db.Fade.SuccessHoldTime
+	e.fadefht = db.Fade.FailureHoldTime
+	e.PlayerInterruptAsFailure = db.PlayerInterruptAsFailure
+	e.fadeshowlag = db.Fade.ShowLagWhileFading
 
-	e.CountUpOnChannel = db.CountUpOnChannel;
-	e.CountUpOnCast = db.CountUpOnCast;
+	e.CountUpOnChannel = db.CountUpOnChannel
+	e.CountUpOnCast = db.CountUpOnCast
 
-	e.channelDelayToDuration = db.ChannelDelayToDuration;
+	e.channelDelayToDuration = db.ChannelDelayToDuration
 
 	e.text3:SetFont(Punschrulle_GetFont(db.TextDelay.Font), db.TextDelay.FontSize)
 	e.text3:SetShadowOffset(db.TextDelay.FontShadowX,db.TextDelay.FontShadowY)
@@ -286,9 +289,6 @@ function Punsch_Castbar_HookDoTradeSkill(index, repeatTimes)
 	PunschEntities["Castbar"].OriginalDoTradeSkill(index, repeatTimes)
 end
 
-local Punsch_Castbar_Tooltip = CreateFrame("GameTooltip","Punsch_Castbar_Tooltip",UIParent,"GameTooltipTemplate");
-Punsch_Castbar_Tooltip:SetOwner(UIParent,"ANCHOR_NONE");
-
 function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 	local e = PunschEntities["Castbar"]
 	if not IsCurrentAction(slot) then 
@@ -306,10 +306,10 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 	--detecting Aimed Shot
 	if IsCurrentAction(slot) then 
 		if GetActionText(slot) == nil then
-			Punsch_Castbar_TooltipTextLeft1:SetText();
-			Punsch_Castbar_TooltipTextRight1:SetText();
-			Punsch_Castbar_Tooltip:SetAction(slot);
-			local spellName = Punsch_Castbar_TooltipTextLeft1:GetText();
+			Punsch_Castbar_TooltipTextLeft1:SetText()
+			Punsch_Castbar_TooltipTextRight1:SetText()
+			e.Tooltip:SetAction(slot)
+			local spellName = Punsch_Castbar_TooltipTextLeft1:GetText()
 			if ( spellName == "Aimed Shot" )  then
 				Punsch_Castbar_CastAimedShot()
 			end
@@ -324,7 +324,7 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 				e.LastSpellIcon = "macro"
 			end
 			e.LastUseActionSlot = slot
-			if SpellIsTargeting() then -- await next gcd, should happen when player has set a target
+			if SpellIsTargeting() then -- await targeting ending, should happen when player has set a target
 				e.LastSpellSetOnLoseIsTargeting = true
 			else --tentatively keep it until next spellcast or slot is no longer "IsCurrentAction"
 				e.LastSpellLocalCast = GetTime()
@@ -360,7 +360,7 @@ function Punsch_Castbar_HookCastSpellByName(spellName,target)
 	local e = PunschEntities["Castbar"]
 
 	--remembers spellname to match with later casts
-	local _,_,sn,sr = strfind(strlower(spellName), "(.+)%((rank %d+)%)");
+	local _,_,sn,sr = strfind(strlower(spellName), "(.+)%((rank %d+)%)")
 	if sn and sr then
 		e.recentlyCastSpells[sn] = {}
 		e.recentlyCastSpells[sn].rank = sr
@@ -389,7 +389,6 @@ function Punsch_Castbar_CastAimedShot()
 		Punsch_Castbar_OnCastStart("Aimed Shot",AimedCastTime)
 	end
 end
-
 
 function Punsch_Castbar_GetLastSpellInfo() 
 	local e = PunschEntities["Castbar"]
@@ -434,7 +433,7 @@ function Punsch_Castbar_OnUpdate()
 		end
 		if e.fadeTimeleft <=0 then
 			Punsch_Bar_FadeStop(e)
-			if not e.AlwaysShow then e.ContentFrame:Hide(); end
+			if not e.AlwaysShow then e.ContentFrame:Hide() end
 		else
 			e.ContentFrame:SetAlpha(1- (e.fadeTime - e.fadeTimeleft) / e.fadeTime)
 		end
@@ -444,9 +443,9 @@ function Punsch_Castbar_OnUpdate()
 	local time = GetTime()
 	if e.isChannel == true then
 		if e.channelDelayToDuration then
-			Punsch_Bar_SetPercent(e,0,((e.endTime - time)/e.duration));
+			Punsch_Bar_SetPercent(e,0,((e.endTime - time)/e.duration))
 		else
-			Punsch_Bar_SetPercent(e,-1*(e.delayedBy/e.duration),((e.endTime - time)/e.duration));
+			Punsch_Bar_SetPercent(e,-1*(e.delayedBy/e.duration),((e.endTime - time)/e.duration))
 		end
 		--gradually hide ticks
 		for i=1,e.TicksShown do
@@ -467,40 +466,40 @@ function Punsch_Castbar_OnUpdate()
 			e.text3:SetText(string.format("%." .. e.decimals .. "f",e.delayedBy))
 		end
 	else
-		Punsch_Bar_SetPercent(e,0,1-((e.endTime - time)/e.duration));
+		Punsch_Bar_SetPercent(e,0,1-((e.endTime - time)/e.duration))
 		if e.delayedBy > 0 then
 			e.text3:SetText("+" .. string.format("%." .. e.decimals .. "f",e.delayedBy))
 		end
 	end
 
-	local t = e.endTime - time;
+	local t = e.endTime - time
 	if t < 0 then t = 0 end
 
 	if (e.isChannel and e.CountUpOnChannel) or (not e.isChannel and e.CountUpOnCast) then
-		e.text2:SetText(string.format("%." .. e.decimals .. "f",e.duration-t) .. e.DurationTextSpacing .. "/" .. e.DurationTextSpacing .. string.format("%." .. e.decimals .. "f",e.duration));
+		e.text2:SetText(string.format("%." .. e.decimals .. "f",e.duration-t) .. e.DurationTextSpacing .. "/" .. e.DurationTextSpacing .. string.format("%." .. e.decimals .. "f",e.duration))
 	else
-		e.text2:SetText(string.format("%." .. e.decimals .. "f",t) .. e.DurationTextSpacing .."/" .. e.DurationTextSpacing .. string.format("%." .. e.decimals .. "f",e.duration));
+		e.text2:SetText(string.format("%." .. e.decimals .. "f",t) .. e.DurationTextSpacing .."/" .. e.DurationTextSpacing .. string.format("%." .. e.decimals .. "f",e.duration))
 	end
 end
 
 function Punsch_Castbar_OnChannelStart(name,duration)
 	local e = PunschEntities["Castbar"]
 	Punsch_Bar_FadeStop(e)
-	e.isCasting = true;
-	e.isChannel = true;
-	e.spellName = name;
-	e.duration = duration/1000;
-	e.startTime = GetTime();
-	e.delayedBy = 0;
-	e.endTime = e.startTime + e.duration;
-	e.selfFill:SetWidth(e.self:GetWidth());
-	e.selfFill:SetPoint("TOPLEFT",e.self);
+	e.isCasting = true
+	e.isChannel = true
+	e.spellName = name
+	e.duration = duration/1000
+	e.startTime = GetTime()
+	e.delayedBy = 0
+	e.endTime = e.startTime + e.duration
+	e.selfFill:SetWidth(e.self:GetWidth())
+	e.selfFill:SetPoint("TOPLEFT",e.self)
 	e.selfFill:SetVertexColor(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].FillChannel.r,
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].FillChannel.g,
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].FillChannel.b,
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].FillChannel.a)
-	e.selfFillShown = true;
-	e.selfFill:Show();
+	e.selfFillShown = true
+	e.selfFill:Show()
 	if e.ShowSpark then e.spark:Show() end
 
 	e.lag, e.icontexture, e.rank = Punsch_Castbar_GetLastSpellInfo() 
@@ -601,19 +600,19 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 		end
 	end
 	if e.UCSN then spellNameText = strupper(spellNameText) end
-	e.text1:SetText(spellNameText);
+	e.text1:SetText(spellNameText)
 
 	e.icontexture = nil
-	e.text2:SetText(0.0 .."/" .. e.duration, 1);
+	e.text2:SetText(0.0 .."/" .. e.duration, 1)
 	e.text3:SetText("")
-	e.ContentFrame:Show();
+	e.ContentFrame:Show()
 end
 
 function Punsch_Castbar_OnChannelStop()
 	local e = PunschEntities["Castbar"]
 	if e.isCasting == true and e.isChannel == true then
-		e.isCasting = false;
-		if not e.AlwaysShow then e.ContentFrame:Hide(); end
+		e.isCasting = false
+		if not e.AlwaysShow then e.ContentFrame:Hide() end
 	end
 end
 
@@ -633,10 +632,10 @@ function Punsch_Castbar_OnChannelUpdate(duration)
 			end
 		end
 		e.delayedBy = e.delayedBy + (newEndTime - e.endTime) 
-		e.endTime = newEndTime;
+		e.endTime = newEndTime
 	else
 		e.delayedBy = newEndTime - e.endTime
-		e.selfFill:SetPoint("TOPLEFT",e.self,"TOPLEFT",-(e.delayedBy/e.duration)*e.self:GetWidth(),0);
+		e.selfFill:SetPoint("TOPLEFT",e.self,"TOPLEFT",-(e.delayedBy/e.duration)*e.self:GetWidth(),0)
 		--potentially indicate lost channelticks here
 
 	end
@@ -644,13 +643,13 @@ end
 
 function Punsch_Castbar_OnCastDelayed(duration)
 	local e = PunschEntities["Castbar"]
-	e.delayedBy = e.delayedBy + duration/1000;
-	e.endTime = e.endTime + duration/1000;
+	e.delayedBy = e.delayedBy + duration/1000
+	e.endTime = e.endTime + duration/1000
 end
 
 function Punsch_Castbar_OnCastInterrupted()
 	if PunschEntities["Castbar"].isCasting then
-		PunschEntities["Castbar"].isCasting = false;
+		PunschEntities["Castbar"].isCasting = false
 		if PunschEntities["Castbar"].PlayerInterruptAsFailure then
 			Punsch_Castbar_StartFade(false) 
 		else
@@ -662,7 +661,7 @@ end
 function Punsch_Castbar_OnCastFailed()
 	local e = PunschEntities["Castbar"]
 	if e.isChannel ~= true then
-		e.isCasting = false;
+		e.isCasting = false
 		if e.spellName == "Aimed Shot" and e.startTime - GetTime() < 0.08 then
 			if not e.isFading then
 				e.ContentFrame:Hide()
@@ -676,21 +675,21 @@ end
 function Punsch_Castbar_OnCastStart(name,duration)
 	local e = PunschEntities["Castbar"]
 	Punsch_Bar_FadeStop(e)
-	e.isCasting = true;
-	e.isChannel = false;
-	e.spellName = name;
-	e.duration = duration/1000;
-	e.delayedBy = 0;
-	e.startTime = GetTime();
-	e.endTime = e.startTime + e.duration;
-	e.selfFill:SetPoint("TOPLEFT",e.self);
+	e.isCasting = true
+	e.isChannel = false
+	e.spellName = name
+	e.duration = duration/1000
+	e.delayedBy = 0
+	e.startTime = GetTime()
+	e.endTime = e.startTime + e.duration
+	e.selfFill:SetPoint("TOPLEFT",e.self)
 	e.selfFill:SetVertexColor(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fill.r,
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fill.g,
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fill.b,
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fill.a)
-	e.selfFill:Hide();
-	e.selfFillShown = false;
-	e.text2:SetText(0.0 .."/" .. e.duration, 1);
+	e.selfFill:Hide()
+	e.selfFillShown = false
+	e.text2:SetText(0.0 .."/" .. e.duration, 1)
 	e.text3:SetText("")
 
 	--tradeskills. add merging tradeskills here, but thats a bunch of work
@@ -718,7 +717,7 @@ function Punsch_Castbar_OnCastStart(name,duration)
 	--spellname text formatting and ranks
 	local spellNameText = e.spellName
 	if e.rank and e.ShowRank then
-		local _,_,r = strfind(e.rank,"Rank (%S+)")
+		local _,_,r = strfind(strlower(e.rank),"rank (%d+)")
 		if r then
 			if e.RankAsRoman then r = RomanNumerals[tonumber(r)] end
 			if not e.RankAsShort then 
@@ -729,10 +728,9 @@ function Punsch_Castbar_OnCastStart(name,duration)
 		end
 	end
 	if e.UCSN then spellNameText = strupper(spellNameText) end
-	e.text1:SetText(spellNameText);
+	e.text1:SetText(spellNameText)
 
 	if e.lag and e.ShowLag then
-		--DEFAULT_CHAT_FRAME:AddMessage("lag: " .. e.lag .. "dur:" .. e.duration .. "q" ..);
 		e.lagBG:ClearAllPoints()
 		e.lagBG:SetPoint("BOTTOMRIGHT",e.ContentFrame)
 		e.lagBG:SetPoint("TOP",e.ContentFrame)
@@ -773,14 +771,14 @@ function Punsch_Castbar_OnCastStart(name,duration)
 		end
 	end
 
-	e.ContentFrame:Show();
+	e.ContentFrame:Show()
 end
 
 function Punsch_Castbar_OnCastStop()
 	local e = PunschEntities["Castbar"]
 	if e.isCasting == true and not e.isChannel == true then
 		Punsch_Castbar_StartFade(true) 
-		e.isCasting = false;
+		e.isCasting = false
 	end
 end
 
@@ -788,7 +786,7 @@ function Punsch_Castbar_StartFade(successful)
 	local e = PunschEntities["Castbar"]
 
 	if not e.fadeEnable then 
-		if not e.AlwaysShow then e.ContentFrame:Hide(); end
+		if not e.AlwaysShow then e.ContentFrame:Hide() end
 		return 
 	end
 	local db = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade
@@ -813,11 +811,11 @@ function Punsch_Castbar_StartFade(successful)
 	end
 
 	if not e.isFading then
-		e.isFading = true;
+		e.isFading = true
 		if e.fadeTime == 0 then
 			e.fadeTimeLeft = 0.01
 		else
-			e.fadeTimeleft = e.fadeTime;
+			e.fadeTimeleft = e.fadeTime
 		end
 		Punsch_Bar_SetPercent(e,0,1)
 		if e.ShowSpark then e.spark:Hide() end
