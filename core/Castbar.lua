@@ -33,6 +33,9 @@ function Punsch_Castbar_Create()
 	--keeps track of recently cast spells to provide icons and ranks in macros/spellbook
 	e.recentlyCastSpells = {}
 
+	--keeps track of icons for 
+	e.spellRankIcons = {}
+
 	--initializing ranged haste for aimedshot workaround
 	e.HasteFromBerserking = 1
 	e.HasteFromQuickShots = 1
@@ -360,12 +363,20 @@ function Punsch_Castbar_HookCastSpellByName(spellName,target)
 	--e.LastSpellLocalCast = nil
 	--e.LastSpellIcon = nil
 
+
 	--remembers spellname to match with later casts
-	local spellInfo = Punsch_Castbar_GetSpellMaxRankInfo(spellName)
-	if spellInfo then
-		e.recentlyCastSpells[strlower(spellName)] = {}
-		e.recentlyCastSpells[strlower(spellName)].texture = spellInfo.icon
-		e.recentlyCastSpells[strlower(spellName)].rank = spellInfo.rank
+	local _,_,sn,sr = strfind(strlower(spellName), "(.+)%((rank %d+)%)");
+	if sn and sr then
+		e.recentlyCastSpells[sn] = {}
+		e.recentlyCastSpells[sn].rank = sr
+		e.recentlyCastSpells[sn].texture = Punsch_Castbar_GetSpellRankIcon(sn,sr)
+	else
+		local spellInfo = Punsch_Castbar_GetSpellMaxRankInfo(spellName)
+		if spellInfo then
+			e.recentlyCastSpells[strlower(spellName)] = {}
+			e.recentlyCastSpells[strlower(spellName)].texture = spellInfo.icon
+			e.recentlyCastSpells[strlower(spellName)].rank = spellInfo.rank
+		end
 	end
 
 	--detecting Aimed Shot
@@ -584,7 +595,7 @@ function Punsch_Castbar_OnChannelStart(name,duration)
 	--spellname text formatting and ranks
 	local spellNameText = e.spellName
 	if e.rank and e.ShowRank then
-		local _,_,r = strfind(e.rank,"Rank (%S+)")
+		local _,_,r = strfind(strlower(e.rank),"rank (%S+)")
 		if r then
 			if e.RankAsRoman then r = RomanNumerals[tonumber(r)] end
 			if not e.RankAsShort then 
@@ -820,8 +831,8 @@ function Punsch_Castbar_StartFade(successful)
 end
 
 function Punsch_Castbar_GetSpellMaxRankInfo(spellName) 
-	spellName = strlower(spellName)
 	local e = PunschEntities["Castbar"]
+	spellName = strlower(spellName)
 	if not e.spellDB[spellName] then 
 		local i = 1
 		while true do
@@ -837,6 +848,25 @@ function Punsch_Castbar_GetSpellMaxRankInfo(spellName)
 		end
 	end
 	return e.spellDB[spellName]
+end
+
+function Punsch_Castbar_GetSpellRankIcon(spellName, spellRank)
+	local e = PunschEntities["Castbar"]
+	spellName = strlower(spellName)
+	spellRank = strlower(spellRank)
+	if not e.spellRankIcons[spellName..spellRank] then
+		local i = 1
+		while true do
+			local name, rank = GetSpellName(i, "spell")
+			if not name then break end
+			if strlower(name) == spellName and strlower(rank)==spellRank then
+				e.spellRankIcons[spellName..spellRank] = GetSpellTexture(i, "spell")
+				break
+			end
+			i = i + 1
+		end
+	end 
+	return e.spellRankIcons[spellName..spellRank]
 end
 
 --[[
