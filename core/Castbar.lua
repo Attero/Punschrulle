@@ -358,11 +358,6 @@ end
 
 function Punsch_Castbar_HookCastSpellByName(spellName,target)
 	local e = PunschEntities["Castbar"]
-	--e.LastSpellDropOnLoseIsCurrentAction = nil
-	--e.LastSpellSetOnLoseIsTargeting = nil
-	--e.LastSpellLocalCast = nil
-	--e.LastSpellIcon = nil
-
 
 	--remembers spellname to match with later casts
 	local _,_,sn,sr = strfind(strlower(spellName), "(.+)%((rank %d+)%)");
@@ -838,7 +833,7 @@ function Punsch_Castbar_GetSpellMaxRankInfo(spellName)
 		while true do
 			local name, rank = GetSpellName(i, "spell")
 			if not name then break end
-			if strlower(name) == spellName and strlower(GetSpellName(i+1, "spell"))~=spellName then
+			if strlower(name) == spellName and strlower(GetSpellName(i+1, "spell") or "")~=spellName then
 				e.spellDB[spellName] = {}
 				e.spellDB[spellName].rank = rank
 				e.spellDB[spellName].icon = GetSpellTexture(i, "spell")
