@@ -1,4 +1,5 @@
 local PunschDBVer = 13
+PunschrulleVersion = "1.0"
 
 function Punschrulle_Initialize()
 	Punschrulle = CreateFrame("Frame", nil, UIParent)
@@ -9,24 +10,31 @@ function Punschrulle_Initialize()
 
 	Punschrulle:SetScript("OnEvent",Punschrulle_OnEvent)
 	Punschrulle:RegisterEvent("ADDON_LOADED");
-
-	DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: /punsch");
 end
 
 function Punschrulle_OnEvent()
 	if (event == "ADDON_LOADED") then
 		if (arg1 == "Punschrulle") then
         	Punschrulle:UnregisterEvent("ADDON_LOADED")
-			if PunschrulleDB==nil or (PunschrulleDB.DBVer~=PunschDBVer) then
-				DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: DB outdated; settings reset to default");
+
+			if PunschrulleDB==nil then
+				Punschrulle_Setdefaults();
+			elseif (PunschrulleDB.DBVer~=PunschDBVer) then
+				DEFAULT_CHAT_FRAME:AddMessage("|cFF7373E6Punschrulle:|r DB outdated; settings reset to default");
 				Punschrulle_Setdefaults();
 			end
+			
 			if PunschrulleProfile==nil then
 				PunschrulleProfile = "Default"
 			elseif not PunschrulleDB.Profiles[PunschrulleProfile] then
 				PunschrulleProfile = "Default"
-				DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: Profile not found, using profile " .. PunschrulleDB.Profiles[PunschrulleProfile].Name)
+				DEFAULT_CHAT_FRAME:AddMessage("|cFF7373E6Punschrulle:|r Profile not found, using profile " .. PunschrulleDB.Profiles[PunschrulleProfile].Name)
 			end
+
+        	if not PunschrulleDB.Profiles[PunschrulleProfile].MuteWelcomeMessage then
+				DEFAULT_CHAT_FRAME:AddMessage("|cFF7373E6Punschrulle|r v" .. PunschrulleVersion .. " by Attero. /punsch");
+        	end
+
 			Punsch_Castbar_Create()
 			Punsch_Mirror_Create()
 			--Punsch_ECB_Create()
@@ -45,10 +53,10 @@ function Punschrulle_Command(msg)
 	elseif(cmd=="test") then
 		ManaTickTest()
 	elseif(cmd=="default") then
-		DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: Reset to defaults.");
+		DEFAULT_CHAT_FRAME:AddMessage("|cFF7373E6Punschrulle:|r Reset to defaults");
 		Punschrulle_Setdefaults();
 	else
-		DEFAULT_CHAT_FRAME:AddMessage("Punschrulle: /punsch config,default,lock");
+		DEFAULT_CHAT_FRAME:AddMessage("|cFF7373E6Punschrulle:|r /punsch config,default,lock");
 	end
 end
 

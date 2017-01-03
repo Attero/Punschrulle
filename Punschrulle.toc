@@ -1,8 +1,8 @@
 ## Interface: 11200
-## Title: Punschrulle
-## Notes: Highly customizable castbar and tasty treat!
+## Title: Punschrulle Castbar 1.0
+## Notes: Highly customizable castbar.
 ## Author: Attero
-## Version: 1.2
+## Version: 1.0
 ## Dependencies: 
 ## SavedVariables: PunschrulleDB
 ## SavedVariablesPerCharacter: PunschrulleProfile

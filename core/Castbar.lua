@@ -344,9 +344,11 @@ function Punsch_Castbar_HookCastSpell(spellID, spellTab)
 	local name,rank = GetSpellName(spellID, spellTab)
 
 	--remembers spellname to match with later casts
-	e.recentlyCastSpells[strlower(name)] = {}
-	e.recentlyCastSpells[strlower(name)].texture = GetSpellTexture(spellID, spellTab)
-	e.recentlyCastSpells[strlower(name)].rank = rank
+	if e.ShowRank or e.ShowIcon then
+		e.recentlyCastSpells[strlower(name)] = {}
+		e.recentlyCastSpells[strlower(name)].texture = GetSpellTexture(spellID, spellTab)
+		e.recentlyCastSpells[strlower(name)].rank = rank
+	end
 
 	--detecting Aimed Shot
 	if name == "Aimed Shot" then
@@ -360,17 +362,19 @@ function Punsch_Castbar_HookCastSpellByName(spellName,target)
 	local e = PunschEntities["Castbar"]
 
 	--remembers spellname to match with later casts
-	local _,_,sn,sr = strfind(strlower(spellName), "(.+)%((rank %d+)%)")
-	if sn and sr then
-		e.recentlyCastSpells[sn] = {}
-		e.recentlyCastSpells[sn].rank = sr
-		e.recentlyCastSpells[sn].texture = Punsch_Castbar_GetSpellRankIcon(sn,sr)
-	else
-		local spellInfo = Punsch_Castbar_GetSpellMaxRankInfo(spellName)
-		if spellInfo then
-			e.recentlyCastSpells[strlower(spellName)] = {}
-			e.recentlyCastSpells[strlower(spellName)].texture = spellInfo.icon
-			e.recentlyCastSpells[strlower(spellName)].rank = spellInfo.rank
+	if e.ShowRank or e.ShowIcon then
+		local _,_,sn,sr = strfind(strlower(spellName), "(.+)%((rank %d+)%)")
+		if sn and sr then
+			e.recentlyCastSpells[sn] = {}
+			e.recentlyCastSpells[sn].rank = sr
+			e.recentlyCastSpells[sn].texture = Punsch_Castbar_GetSpellRankIcon(sn,sr)
+		else
+			local spellInfo = Punsch_Castbar_GetSpellMaxRankInfo(spellName)
+			if spellInfo then
+				e.recentlyCastSpells[strlower(spellName)] = {}
+				e.recentlyCastSpells[strlower(spellName)].texture = spellInfo.icon
+				e.recentlyCastSpells[strlower(spellName)].rank = spellInfo.rank
+			end
 		end
 	end
 

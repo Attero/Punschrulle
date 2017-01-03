@@ -1,10 +1,13 @@
 PunschOptionWindow = nil
 PunschEditFrames = {}
 
+local headerFont = PunschrulleFonts["Vixar"]
+local normalFont = PunschrulleFonts["SansNarrow"]
+local normalSize = 12
+
 function Punsch_Option_MainWindow_Toggle()
 	if not PunschOptionWindow then
 		Punsch_Option_CreateWindows()
-
 	else
 		if PunschOptionWindow.Handle:IsShown() then
 			PunschOptionWindow.Handle:Hide()
@@ -29,10 +32,11 @@ function Punsch_Option_CreateWindows()
 	Punsch_Options_EditMirrorEvents_Create()
 	--Punsch_Options_EditECB_Create()
 	--Punsch_Options_EditECBText_Create() 
+	Punsch_Options_About_Create()
 
 	--Create lock button
-	local btn = CreateFrame("Button",nil,PunschOptionWindow.Handle);
-	btn:SetPoint("TOPLEFT", PunschOptionWindow.selectionBG, "TOPLEFT",0,-15*PunschOptionWindow.btnMade)
+	local btn = CreateFrame("Button",nil,PunschOptionWindow.Handle)
+	btn:SetPoint("TOPLEFT", PunschOptionWindow.selectionBG, "TOPLEFT",-101,-15*PunschOptionWindow.btnMade)
 	btn:SetWidth(100)
 	btn:SetHeight(15)
 	
@@ -42,11 +46,11 @@ function Punsch_Option_CreateWindows()
 	texture:SetAllPoints(btn)
 	
 	local txt = btn:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(PunschrulleFonts["SansNarrow"], 12)
+	txt:SetFont(PunschrulleFonts["Vixar"], 12)
 	txt:SetShadowColor(0,0,0,1)
 	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText("Unlock")
-	txt:SetPoint("LEFT",btn)
+	txt:SetPoint("LEFT",btn,"LEFT",1,0)
 	
 	btn:SetScript("OnClick",function ()
 		if Punsch_Entity_Locked then
@@ -63,9 +67,14 @@ function Punsch_Option_CreateWindows()
 		texture:SetAlpha(0.6)
 	end)
 
+	PunschOptionWindow.buttonbg = PunschOptionWindow.Handle:CreateTexture(nil,"ARTWORK")
+	PunschOptionWindow.buttonbg:SetTexture(0.2,0.2,0.2,0.8)
+	PunschOptionWindow.buttonbg:SetPoint("TOPLEFT", PunschOptionWindow.Handle, "TOPLEFT",-100.5,-14)
+	PunschOptionWindow.buttonbg:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT",1,-1)
+
 	PunschOptionWindow.btnMade = PunschOptionWindow.btnMade + 1
 
-	PunschEditFrames["Profile"].Handle:Show();
+	PunschEditFrames["Profile"].Handle:Show()
 	PunschOptionWindow.Open = PunschEditFrames["Profile"].Handle
 	PunschOptionWindow.Open.texture:SetTexture(0.70,0.70,1,0.9)
 end
@@ -75,7 +84,7 @@ function Punsch_Options_MainWindow_Create()
 	
 	PunschOptionWindow.Handle = CreateFrame("Frame",nil,UIParent)
 	PunschOptionWindow.Handle:SetFrameStrata("BACKGROUND")
-	PunschOptionWindow.Handle:SetWidth(582)
+	PunschOptionWindow.Handle:SetWidth(482)
 	PunschOptionWindow.Handle:SetHeight(400)
 
 	PunschOptionWindow.BG = PunschOptionWindow.Handle:CreateTexture(nil,"BACKGROUND")
@@ -83,18 +92,18 @@ function Punsch_Options_MainWindow_Create()
 	PunschOptionWindow.BG:SetAllPoints(PunschOptionWindow.Handle)
 	
 	PunschOptionWindow.Title = PunschOptionWindow.Handle:CreateFontString(nil,"OVERLAY")
-	PunschOptionWindow.Title:SetFont(PunschrulleFonts["SansNarrow"], 14)
+	PunschOptionWindow.Title:SetFont(PunschrulleFonts["Vixar"], 14)
 	PunschOptionWindow.Title:SetShadowColor(0,0,0,1)
 	PunschOptionWindow.Title:SetShadowOffset(0.8,-0.8)
-	PunschOptionWindow.Title:SetText("Punschrulle Options")
-	PunschOptionWindow.Title:SetPoint("TOP", PunschOptionWindow.Handle)
+	PunschOptionWindow.Title:SetText("Punschrulle v" .. PunschrulleVersion)
+	PunschOptionWindow.Title:SetPoint("TOP", PunschOptionWindow.Handle,"TOP",0,-1)
 
 	PunschOptionWindow.TitleBar = CreateFrame("Frame",nil,PunschOptionWindow.Handle)
 	PunschOptionWindow.TitleBar:SetPoint("TOPLEFT",PunschOptionWindow.Handle)
 	PunschOptionWindow.TitleBar:SetPoint("BOTTOM",PunschOptionWindow.Handle, "TOP",0,-14)
 	PunschOptionWindow.TitleBar:SetPoint("RIGHT",PunschOptionWindow.Handle, "RIGHT",-14,0)
 
-	PunschOptionWindow.BtnClose = CreateFrame("Button",nil,PunschOptionWindow.Handle,"UIPanelCloseButton");
+	PunschOptionWindow.BtnClose = CreateFrame("Button",nil,PunschOptionWindow.Handle,"UIPanelCloseButton")
 	PunschOptionWindow.BtnClose:SetWidth(12)
 	PunschOptionWindow.BtnClose:SetHeight(12)
 	PunschOptionWindow.BtnClose:SetPoint("TOPRIGHT", PunschOptionWindow.Handle, "TOPRIGHT",-1,-1)
@@ -103,23 +112,18 @@ function Punsch_Options_MainWindow_Create()
 	PunschOptionWindow.BtnClose:GetPushedTexture():SetTexCoord(0.2,0.75,0.25,0.75)
 
 	PunschOptionWindow.selectionBG = PunschOptionWindow.Handle:CreateTexture(nil,"BORDER")
-	PunschOptionWindow.selectionBG:SetTexture(0.90,0.90,0.90,0.6)
+	PunschOptionWindow.selectionBG:SetVertexColor(0.73,0.64,0.8,0.8)
+	PunschOptionWindow.selectionBG:SetTexture("DUNGEONS\\TEXTURES\\ROCK\\JLO_UDERCITY_ICE")
 	PunschOptionWindow.selectionBG:SetPoint("BOTTOMRIGHT", PunschOptionWindow.Handle, "BOTTOMRIGHT",-1,1)
 	PunschOptionWindow.selectionBG:SetPoint("TOPLEFT", PunschOptionWindow.Handle, "TOPLEFT",1,-15)
-	
-	PunschOptionWindow.selectionlLine = PunschOptionWindow.Handle:CreateTexture(nil,"ARTWORK")
-	PunschOptionWindow.selectionlLine:SetTexture(0.2,0.2,0.2,0.8)
-	PunschOptionWindow.selectionlLine:SetWidth(1)
-	PunschOptionWindow.selectionlLine:SetPoint("TOPLEFT", PunschOptionWindow.selectionBG, "TOPLEFT",100,0)
-	PunschOptionWindow.selectionlLine:SetPoint("BOTTOM", PunschOptionWindow.selectionBG, "BOTTOM")
 
 	PunschOptionWindow.btnMade = 0
 	PunschOptionWindow.Open = nil
 	
 	PunschOptionWindow.Handle:SetPoint("CENTER",UIParent,"CENTER",0,0)	
 
-	PunschOptionWindow.Handle:SetMovable(true);
-	PunschOptionWindow.TitleBar:EnableMouse(true);
+	PunschOptionWindow.Handle:SetMovable(true)
+	PunschOptionWindow.TitleBar:EnableMouse(true)
 	PunschOptionWindow.TitleBar:SetScript("OnMouseDown", Punsch_Options_MainWindow_StartMove)
 	PunschOptionWindow.TitleBar:SetScript("OnMouseUp", Punsch_Options_MainWindow_StopMove)
 	PunschOptionWindow.TitleBar:SetScript("OnHide", Punsch_Options_MainWindow_StopMove)
@@ -139,8 +143,8 @@ end
 
 function Punsch_Options_EditFrame_Create(name) 
 	local handle = CreateFrame("Frame",nil,PunschOptionWindow.Handle)
-	handle:SetPoint("BOTTOMRIGHT", PunschOptionWindow.Handle, "BOTTOMRIGHT",-1,2)
-	handle:SetPoint("TOPLEFT", PunschOptionWindow.selectionBG, "TOPLEFT",100,-2)
+	handle:SetPoint("BOTTOMRIGHT", PunschOptionWindow.Handle, "BOTTOMRIGHT",0,0)
+	handle:SetPoint("TOPLEFT", PunschOptionWindow.selectionBG, "TOPLEFT",0,-0.5)
 
 	local scrollhandle = CreateFrame("ScrollFrame", nil, handle)
 
@@ -162,16 +166,16 @@ function Punsch_Options_EditFrame_Create(name)
 	end)
 
 	local childhandle = CreateFrame("Frame",nil,scrollhandle)
-	childhandle:SetWidth(479)
-	childhandle:SetHeight(350)
+	childhandle:SetWidth(480)
+	childhandle:SetHeight(384)
 	childhandle.num = 0
 	childhandle.o = {}
 
 	scrollhandle:SetScrollChild(childhandle)
 
 	--Create button in the sidebar
-	local btn = CreateFrame("Button",nil,PunschOptionWindow.Handle);
-	btn:SetPoint("TOPLEFT", PunschOptionWindow.selectionBG, "TOPLEFT",0,-15*PunschOptionWindow.btnMade)
+	local btn = CreateFrame("Button",nil,PunschOptionWindow.Handle)
+	btn:SetPoint("TOPLEFT", PunschOptionWindow.selectionBG, "TOPLEFT",-101,-15*PunschOptionWindow.btnMade)
 	
 	btn:SetWidth(100)
 	btn:SetHeight(15)
@@ -182,11 +186,11 @@ function Punsch_Options_EditFrame_Create(name)
 	handle.texture:SetAllPoints(btn)
 	
 	local txt = btn:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(PunschrulleFonts["SansNarrow"], 12)
+	txt:SetFont(PunschrulleFonts["Vixar"], 12)
 	txt:SetShadowColor(0,0,0,1)
 	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(name)
-	txt:SetPoint("LEFT",btn)
+	txt:SetPoint("LEFT",btn,"LEFT",1,0)
 	
 	btn:SetScript("OnClick",function ()
 		if Punschrulle_Options_TextureFrame then Punschrulle_Options_TextureFrame.h:Hide() end
@@ -218,35 +222,37 @@ function Punsch_Options_EditFrame_UpdateAll()
 end
 
 function Punsch_Options_EditFrame_CreateHeaderOption(parent,Text)
-	parent.num = parent.num + 1;
+	parent.num = parent.num + 1
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 12)
+	txt:SetFont(normalFont, normalSize+2)
 	txt:SetShadowColor(0,0,0,1)
 	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText("            " .. Text)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14 -2)
 	txt:SetPoint("RIGHT", parent)
 
-	parent.num = parent.num + 1;
-	return editbox
+	parent.num = parent.num + 1
 end
 
 function Punsch_Options_EditFrame_CreateEditTextOption(parent,optionText,getter,setter)
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(normalFont, normalSize)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(optionText)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14-2)
 	txt:SetPoint("RIGHT", parent, "LEFT",255,0)
 	
-	local editbox = CreateFrame("EditBox",nil,parent);
+	local editbox = CreateFrame("EditBox",nil,parent)
 	editbox:SetHeight(13)
-	editbox:SetFont(GameFontNormal:GetFont(), 10)
-	editbox:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14)
-	editbox:SetPoint("RIGHT", parent, "RIGHT",0,0)
+	editbox:SetFont(normalFont, normalSize)
+
+	editbox:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14-2)
+	editbox:SetPoint("RIGHT", parent, "RIGHT",-1.5,0)
 	editbox:SetAutoFocus(false)
 
  	local onEnter = function () 
@@ -265,24 +271,26 @@ function Punsch_Options_EditFrame_CreateEditTextOption(parent,optionText,getter,
 	local editboxbg = parent:CreateTexture(nil,"BACKGROUND")
 	editboxbg:SetTexture(0.1,0.1,0.1,0.6)
 	editboxbg:SetAllPoints(editbox)
-	parent.num = parent.num + 1;
+	parent.num = parent.num + 1
 	return updateOption,editbox,txt
 end
 
 function Punsch_Options_EditFrame_CreateEditNumberOption(parent,optionText,getter,setter)
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(normalFont, normalSize)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(optionText)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14-2)
 	txt:SetPoint("RIGHT", parent, "LEFT",255,0)
 	
-	local editbox = CreateFrame("EditBox",nil,parent);
+	local editbox = CreateFrame("EditBox",nil,parent)
 	editbox:SetHeight(13)
-	editbox:SetFont(GameFontNormal:GetFont(), 10)
-	editbox:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14)
-	editbox:SetPoint("RIGHT", parent, "RIGHT",0,0)
+	editbox:SetFont(normalFont, normalSize)
+	editbox:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14-2)
+	editbox:SetPoint("RIGHT", parent, "RIGHT",-1.5,0)
 	editbox:SetAutoFocus(false)
 
 	local updateOption = function ()
@@ -306,7 +314,7 @@ function Punsch_Options_EditFrame_CreateEditNumberOption(parent,optionText,gette
 	local editboxbg = parent:CreateTexture(nil,"BACKGROUND")
 	editboxbg:SetTexture(0.1,0.1,0.1,0.6)
 	editboxbg:SetAllPoints(editbox)
-	parent.num = parent.num + 1;
+	parent.num = parent.num + 1
 	return updateOption,editbox,txt
 end
 
@@ -314,7 +322,7 @@ function Punschrulle_Options_Mediapicker_Create()
 	local h = CreateFrame("Frame",nil,PunschOptionWindow.Handle)
 	h:SetPoint("TOPLEFT", PunschOptionWindow.Handle, "TOPRIGHT",0,-15)
 	h:SetPoint("BOTTOM", PunschOptionWindow.Handle)
-	h:SetWidth(200);
+	h:SetWidth(200)
 
 	local bg = h:CreateTexture(nil,"BORDER")
 	bg:SetTexture(0.2,0.2,0.2,0.8)
@@ -352,10 +360,10 @@ function Punschrulle_Options_FontFrame_Show(getter,setter)
 		local Buttons = {}
 
 		local btn = {}
-		btn.f = CreateFrame("Button",nil,content);
+		btn.f = CreateFrame("Button",nil,content)
 		btn.f:SetHeight(13)
 		btn.f:SetPoint("TOPLEFT", content, "TOPLEFT",0,-num * 14)
-		btn.f:SetPoint("RIGHT", content, "RIGHT",0,0)
+		btn.f:SetPoint("RIGHT", content, "RIGHT",-1.5,0)
 
 		btn.bg = btn.f:CreateTexture(nil,"BACKGROUND")
 		btn.bg:SetTexture(0.1,0.1,0.1,0.6)
@@ -377,7 +385,7 @@ function Punschrulle_Options_FontFrame_Show(getter,setter)
     	table.sort(sortedFonts)
     	for _,i in ipairs(sortedFonts) do
 			local btn = {}
-			btn.f = CreateFrame("Button",nil,content);
+			btn.f = CreateFrame("Button",nil,content)
 			btn.f:SetHeight(13)
 			btn.f:SetPoint("TOPLEFT", content, "TOPLEFT",0,-num * 14)
 			btn.f:SetPoint("RIGHT", content, "RIGHT",0,0)
@@ -423,18 +431,20 @@ end
 
 function Punsch_Options_EditFrame_CreateFontPickerOption(parent,optionText,getter,setter)
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(normalFont, normalSize)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(optionText)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14-2)
 	txt:SetPoint("RIGHT", parent, "LEFT",255,0)
 	
-	local btn = CreateFrame("Button",nil,parent);
+	local btn = CreateFrame("Button",nil,parent)
 	btn:SetHeight(13)
-	btn:SetFont(GameFontNormal:GetFont(), 10)
-	btn:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14)
-	btn:SetPoint("RIGHT", parent, "RIGHT",0,0)
+	btn:SetFont(normalFont, normalSize)
+	btn:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14-2)
+	btn:SetPoint("RIGHT", parent, "RIGHT",-1.5,0)
 
 	local btnbg = parent:CreateTexture(nil,"BACKGROUND")
 	btnbg:SetTexture(0.1,0.1,0.1,0.6)
@@ -451,7 +461,7 @@ function Punsch_Options_EditFrame_CreateFontPickerOption(parent,optionText,gette
 
 	btn:SetScript("OnClick",onClick)
 
-	parent.num = parent.num + 1;
+	parent.num = parent.num + 1
 	return updateOption
 end
 
@@ -466,7 +476,7 @@ function Punschrulle_Options_TextureFrame_Show(getter,setter)
     	table.sort(sortedTextures)
     	for _,i in ipairs(sortedTextures) do
 			local btn = {}
-			btn.f = CreateFrame("Button",nil,content);
+			btn.f = CreateFrame("Button",nil,content)
 			btn.f:SetHeight(13)
 			btn.f:SetPoint("TOPLEFT", content, "TOPLEFT",0,-num * 14)
 			btn.f:SetPoint("RIGHT", content, "RIGHT",0,0)
@@ -476,7 +486,7 @@ function Punschrulle_Options_TextureFrame_Show(getter,setter)
 			btn.bg:SetAllPoints(btn.f)
 
 			btn.txt = btn.f:CreateFontString(nil,"OVERLAY")
-			btn.txt:SetFont(GameFontNormal:GetFont(), 12)
+			btn.txt:SetFont(normalFont, 12)
 			btn.txt:SetShadowColor(0,0,0,1)
 			btn.txt:SetShadowOffset(0.8,-0.8)
 			btn.txt:SetText(i)
@@ -514,18 +524,20 @@ end
 
 function Punsch_Options_EditFrame_CreateTexturePickerOption(parent,optionText,getter,setter)
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(normalFont, normalSize)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(optionText)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14-2)
 	txt:SetPoint("RIGHT", parent, "LEFT",255,0)
 	
-	local btn = CreateFrame("Button",nil,parent);
+	local btn = CreateFrame("Button",nil,parent)
 	btn:SetHeight(13)
-	btn:SetFont(GameFontNormal:GetFont(), 10)
-	btn:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14)
-	btn:SetPoint("RIGHT", parent, "RIGHT",0,0)
+	btn:SetFont(normalFont, normalSize)
+	btn:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14-2)
+	btn:SetPoint("RIGHT", parent, "RIGHT",-1.5,0)
 
 	local btnoutline = btn:CreateTexture(nil,"BACKGROUND")
 	btnoutline:SetTexture(0,0,0,1)
@@ -545,23 +557,25 @@ function Punsch_Options_EditFrame_CreateTexturePickerOption(parent,optionText,ge
 
 	btn:SetScript("OnClick",onClick)
 
-	parent.num = parent.num + 1;
+	parent.num = parent.num + 1
 	return updateOption
 end
 
 function Punsch_Options_EditFrame_CreateCheckBoxOption(parent,optionText,getter,setter)
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(normalFont, normalSize)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(optionText)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14-2)
 	txt:SetPoint("RIGHT", parent, "LEFT",255,0)
 	
-	local checkbox = CreateFrame("CheckButton",nil,parent,"UICheckButtonTemplate");
+	local checkbox = CreateFrame("CheckButton",nil,parent,"UICheckButtonTemplate")
 	checkbox:SetHeight(13)
 	checkbox:SetWidth(14)
-	checkbox:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14)
+	checkbox:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14-2)
 	checkbox:GetNormalTexture():SetTexCoord(0.3,0.6,0.3,0.6)
 	checkbox:GetHighlightTexture():SetTexCoord(0.3,0.6,0.3,0.6)
 	checkbox:GetPushedTexture():SetTexCoord(0.3,0.6,0.3,0.6)
@@ -580,24 +594,26 @@ function Punsch_Options_EditFrame_CreateCheckBoxOption(parent,optionText,getter,
 		end
 	end
 
-	parent.num = parent.num + 1;
+	parent.num = parent.num + 1
 	return updateOption
 end
 
 function Punsch_Options_EditFrame_ColorPickerOption(parent,optionText,getter,setter)
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(normalFont, normalSize)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(optionText)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14-2)
 	txt:SetPoint("RIGHT", parent, "LEFT",255,0)
 	
-	local btn = CreateFrame("Button",nil,parent);
+	local btn = CreateFrame("Button",nil,parent)
 	btn:SetHeight(13)
-	btn:SetFont(GameFontNormal:GetFont(), 10)
-	btn:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14)
-	btn:SetPoint("RIGHT", parent, "RIGHT",0,0)
+	--btn:SetFont(normalFont, normalSize)
+	btn:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14-2)
+	btn:SetPoint("RIGHT", parent, "RIGHT",-1.5,0)
 
 	local btnbg1 = btn:CreateTexture(nil,"BACKGROUND")
 	btnbg1:SetTexture(0,0,0,1)
@@ -613,16 +629,18 @@ function Punsch_Options_EditFrame_ColorPickerOption(parent,optionText,getter,set
 	btnbg3:SetPoint("BOTTOMRIGHT", btnbg1, "BOTTOMRIGHT",-1,1)
 
 	local txtR = parent:CreateFontString(nil,"OVERLAY")
-	txtR:SetFont(GameFontNormal:GetFont(), 10)
+	txtR:SetFont(normalFont, normalSize)
+	txtR:SetShadowColor(0,0,0,1)
+	txtR:SetShadowOffset(0.8,-0.8)
 	txtR:SetText("R")
 	txtR:SetHeight(13)
 	txtR:SetJustifyH("LEFT")
-	txtR:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-(parent.num+1) * 14)
+	txtR:SetPoint("TOPLEFT", parent, "TOPLEFT",257,-(parent.num+1) * 14-2)
 	txtR:SetPoint("RIGHT", parent, "LEFT",265,0)
 	
-	local editboxR = CreateFrame("EditBox",nil,parent);
+	local editboxR = CreateFrame("EditBox",nil,parent)
 	editboxR:SetHeight(13)
-	editboxR:SetFont(GameFontNormal:GetFont(), 10)
+	editboxR:SetFont(normalFont, normalSize)
 	editboxR:SetPoint("TOPLEFT", txtR, "TOPRIGHT",3,0)
 	editboxR:SetPoint("RIGHT", txtR, "RIGHT",45,0)
 	editboxR:SetAutoFocus(false)
@@ -632,16 +650,18 @@ function Punsch_Options_EditFrame_ColorPickerOption(parent,optionText,getter,set
 	editboxbgR:SetAllPoints(editboxR)
 
 	local txtG = parent:CreateFontString(nil,"OVERLAY")
-	txtG:SetFont(GameFontNormal:GetFont(), 10)
+	txtG:SetFont(normalFont, normalSize)
+	txtG:SetShadowColor(0,0,0,1)
+	txtG:SetShadowOffset(0.8,-0.8)
 	txtG:SetText("G")
 	txtG:SetHeight(13)
 	txtG:SetJustifyH("LEFT")
 	txtG:SetPoint("TOPLEFT", txtR, "TOPLEFT",56,0)
 	txtG:SetPoint("RIGHT", txtR, "RIGHT",56,0)
 	
-	local editboxG = CreateFrame("EditBox",nil,parent);
+	local editboxG = CreateFrame("EditBox",nil,parent)
 	editboxG:SetHeight(13)
-	editboxG:SetFont(GameFontNormal:GetFont(), 10)
+	editboxG:SetFont(normalFont, normalSize)
 	editboxG:SetPoint("TOPLEFT", txtG, "TOPRIGHT",3,0)
 	editboxG:SetPoint("RIGHT", txtG, "RIGHT",45,0)
 	editboxG:SetAutoFocus(false)
@@ -651,16 +671,18 @@ function Punsch_Options_EditFrame_ColorPickerOption(parent,optionText,getter,set
 	editboxbgG:SetAllPoints(editboxG)
 
 	local txtB = parent:CreateFontString(nil,"OVERLAY")
-	txtB:SetFont(GameFontNormal:GetFont(), 10)
+	txtB:SetFont(normalFont, normalSize)
+	txtB:SetShadowColor(0,0,0,1)
+	txtB:SetShadowOffset(0.8,-0.8)
 	txtB:SetText("B")
 	txtB:SetHeight(13)
 	txtB:SetJustifyH("LEFT")
 	txtB:SetPoint("TOPLEFT", txtG, "TOPLEFT",56,0)
 	txtB:SetPoint("RIGHT", txtG, "RIGHT",56,0)
 	
-	local editboxB = CreateFrame("EditBox",nil,parent);
+	local editboxB = CreateFrame("EditBox",nil,parent)
 	editboxB:SetHeight(13)
-	editboxB:SetFont(GameFontNormal:GetFont(), 10)
+	editboxB:SetFont(normalFont, normalSize)
 	editboxB:SetPoint("TOPLEFT", txtB, "TOPRIGHT",3,0)
 	editboxB:SetPoint("RIGHT", txtB, "RIGHT",45,0)
 	editboxB:SetAutoFocus(false)
@@ -670,18 +692,20 @@ function Punsch_Options_EditFrame_ColorPickerOption(parent,optionText,getter,set
 	editboxbgB:SetAllPoints(editboxB)
 
 	local txtA = parent:CreateFontString(nil,"OVERLAY")
-	txtA:SetFont(GameFontNormal:GetFont(), 10)
+	txtA:SetFont(normalFont, normalSize)
+	txtA:SetShadowColor(0,0,0,1)
+	txtA:SetShadowOffset(0.8,-0.8)
 	txtA:SetText("A")
 	txtA:SetHeight(13)
 	txtA:SetJustifyH("LEFT")
 	txtA:SetPoint("TOPLEFT", txtB, "TOPLEFT",56,0)
 	txtA:SetPoint("RIGHT", txtB, "RIGHT",56,0)
 	
-	local editboxA = CreateFrame("EditBox",nil,parent);
+	local editboxA = CreateFrame("EditBox",nil,parent)
 	editboxA:SetHeight(13)
-	editboxA:SetFont(GameFontNormal:GetFont(), 10)
+	editboxA:SetFont(normalFont, normalSize)
 	editboxA:SetPoint("TOPLEFT", txtA, "TOPRIGHT",3,0)
-	editboxA:SetPoint("RIGHT", parent, "RIGHT",0,0)
+	editboxA:SetPoint("RIGHT", parent, "RIGHT",-1.5,0)
 	editboxA:SetAutoFocus(false)
 
 	local editboxbgA = parent:CreateTexture(nil,"BACKGROUND")
@@ -740,56 +764,58 @@ function Punsch_Options_EditFrame_ColorPickerOption(parent,optionText,getter,set
 				updateOption()
 			end
 			ColorPickerFrame:SetFrameStrata("FULLSCREEN_DIALOG")
-			ColorPickerFrame:Hide();
-			ColorPickerFrame:Show();
+			ColorPickerFrame:Hide()
+			ColorPickerFrame:Show()
 			btnbg3.oldr, btnbg3.oldg, btnbg3.oldb, btnbg3.olda = getter()
-			ColorPickerFrame:SetColorRGB(btnbg3.oldr,btnbg3.oldg,btnbg3.oldb);
+			ColorPickerFrame:SetColorRGB(btnbg3.oldr,btnbg3.oldg,btnbg3.oldb)
 		end
 	end)
 
-	parent.num = parent.num + 2;
+	parent.num = parent.num + 2
 	return updateOption
 end
 
 Punschrulle_Options_EditFrame_DropDownMenuCount = 0
 function Punsch_Options_EditFrame_CreateDropDownOption(parent,optionText)
 	local txt = parent:CreateFontString(nil,"OVERLAY")
-	txt:SetFont(GameFontNormal:GetFont(), 10)
+	txt:SetFont(normalFont, normalSize)
+	txt:SetShadowColor(0,0,0,1)
+	txt:SetShadowOffset(0.8,-0.8)
 	txt:SetText(optionText)
 	txt:SetHeight(13)
 	txt:SetJustifyH("LEFT")
-	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14)
+	txt:SetPoint("TOPLEFT", parent, "TOPLEFT",1,-parent.num * 14-2)
 	txt:SetPoint("RIGHT", parent, "LEFT",255,0)
 
 	local fn = "PunschrulleEbin" .. Punschrulle_Options_EditFrame_DropDownMenuCount
-	Punschrulle_Options_EditFrame_DropDownMenuCount = Punschrulle_Options_EditFrame_DropDownMenuCount + 1;
+	Punschrulle_Options_EditFrame_DropDownMenuCount = Punschrulle_Options_EditFrame_DropDownMenuCount + 1
 
 	local dropmenu = CreateFrame("Frame", fn, parent, "UIDropDownMenuTemplate")
-	dropmenu:SetPoint("TOPLEFT", parent, "TOPLEFT",242,-parent.num * 14 +15)
+	dropmenu:SetPoint("TOPLEFT", parent, "TOPLEFT",242,-parent.num * 14 +17)
 
 	--this makes the dropdownwidget fit in. Although its HIDEOUS code
-	getglobal(fn.."Left"):Hide();
-	getglobal(fn.."Right"):Hide();
-	getglobal(fn.."Middle"):SetTexture(0.1,0.1,0.1,0.6);
+	getglobal(fn.."Left"):Hide()
+	getglobal(fn.."Right"):Hide()
+	getglobal(fn.."Middle"):SetTexture(0.1,0.1,0.1,0.6)
 	getglobal(fn.."Middle"):SetHeight(13)
-	getglobal(fn.."Middle"):SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14)
-	getglobal(fn.."Middle"):SetPoint("RIGHT", parent, "RIGHT",0,0)
-	getglobal(fn.."Button"):ClearAllPoints();
-	getglobal(fn.."Button"):SetPoint("TOPLEFT", getglobal(fn.."Middle"), "TOPLEFT", 1, 0);
-	getglobal(fn.."Button"):SetPoint("BOTTOMRIGHT", getglobal(fn.."Middle"), "TOPLEFT", 19, -13);
+	getglobal(fn.."Middle"):SetPoint("TOPLEFT", parent, "TOPLEFT",257,-parent.num * 14-2)
+	getglobal(fn.."Middle"):SetPoint("RIGHT", parent, "RIGHT",-1.5,0)
+	getglobal(fn.."Button"):ClearAllPoints()
+	getglobal(fn.."Button"):SetPoint("TOPLEFT", getglobal(fn.."Middle"), "TOPLEFT", 1, 0)
+	getglobal(fn.."Button"):SetPoint("BOTTOMRIGHT", getglobal(fn.."Middle"), "TOPLEFT", 19, -13)
 	getglobal(fn.."Text"):SetPoint("LEFT",getglobal(fn.."Button"),"RIGHT",2,0)
 	getglobal(fn.."Text"):SetJustifyH("LEFT")
-	getglobal(fn.."Text"):SetFont(GameFontNormal:GetFont(), 10)
-	getglobal(fn.."ButtonNormalTexture"):SetAllPoints(getglobal(fn.."Button"));
-	getglobal(fn.."ButtonPushedTexture"):SetAllPoints(getglobal(fn.."Button"));
-	getglobal(fn.."ButtonHighlightTexture"):SetAllPoints(getglobal(fn.."Button"));
-	getglobal(fn.."ButtonNormalTexture"):SetTexCoord(0.2,0.75,0.2,0.85);
-	getglobal(fn.."ButtonPushedTexture"):SetTexCoord(0.2,0.75,0.2,0.85);
-	getglobal(fn.."ButtonHighlightTexture"):SetTexCoord(0.2,0.75,0.2,0.85);
+	getglobal(fn.."Text"):SetFont(normalFont, normalSize)
+	getglobal(fn.."ButtonNormalTexture"):SetAllPoints(getglobal(fn.."Button"))
+	getglobal(fn.."ButtonPushedTexture"):SetAllPoints(getglobal(fn.."Button"))
+	getglobal(fn.."ButtonHighlightTexture"):SetAllPoints(getglobal(fn.."Button"))
+	getglobal(fn.."ButtonNormalTexture"):SetTexCoord(0.2,0.75,0.2,0.85)
+	getglobal(fn.."ButtonPushedTexture"):SetTexCoord(0.2,0.75,0.2,0.85)
+	getglobal(fn.."ButtonHighlightTexture"):SetTexCoord(0.2,0.75,0.2,0.85)
 
 	--I'm not gonna come up with a way of streamlining the coding of these. Additional code is required when the function is used, but it may vary greatly.
 
-	parent.num = parent.num + 1;
+	parent.num = parent.num + 1
 	return dropmenu
 end
 
@@ -877,7 +903,7 @@ function Punsch_Options_EditProfile_Create()
 			info.arg1 = i
 			info.notCheckable = true
 			info.func = function (v)
-				local num = 0;
+				local num = 0
 				while PunschrulleDB.Profiles["Custom" .. num] do
 					num = num + 1
 				end
@@ -915,6 +941,12 @@ function Punsch_Options_EditProfile_Create()
 		end
 	end)
 
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Mute welcome message", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile].MuteWelcomeMessage
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile].MuteWelcomeMessage = s
+	end)
+
 	PunschEditFrames["Profile"].update = function ()
 		for _,update in pairs(e.o) do
 			update()
@@ -942,7 +974,7 @@ function Punsch_Options_EditCastbar_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].HideBlizzardBar = s
 	end)
 
-	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show lag on castbar", function ()
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show lag on Castbar", function ()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowLag
 	end, function (s)
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowLag = s
@@ -1745,11 +1777,12 @@ function Punsch_Options_EditFading_Create()
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.Time = s
 	end)
 
-	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Fade on Channels", function () 
-		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.OnChannel
-	end, function (s)
-		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.OnChannel = s
-	end)
+	--unimplemented as of right now
+	--e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Fade on Channels", function () 
+	--	return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.OnChannel
+	--end, function (s)
+	--	PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.OnChannel = s
+	--end)
 
 	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Show Lag While Fading", function () 
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fade.ShowLagWhileFading
@@ -2368,13 +2401,13 @@ function Punsch_Options_EditMirrorEvents_Create()
 				Iconbox:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
 			end
 		end)
-		PunschEditFrames["MirrorEvents"][name]:SetPoint("TOPLEFT", e, "TOPLEFT",1,-e.num * 14)
-		PunschEditFrames["MirrorEvents"][name]:SetPoint("RIGHT", e, "RIGHT",-30,0)
+		PunschEditFrames["MirrorEvents"][name]:SetPoint("TOPLEFT", e, "TOPLEFT",1,-e.num * 14 -2)
+		PunschEditFrames["MirrorEvents"][name]:SetPoint("RIGHT", e, "RIGHT",-31,0)
 
 		Iconbox:SetPoint("BOTTOMLEFT", PunschEditFrames["MirrorEvents"][name], "BOTTOMRIGHT",0.5,0)
 		Iconbox:SetPoint("TOPRIGHT", PunschEditFrames["MirrorEvents"][name], "TOPRIGHT",29.5,14)
 
-		e.num = e.num + 2;
+		e.num = e.num + 2
 	end
 
 	PunschEditFrames["MirrorEvents"].update = function ()
@@ -2868,4 +2901,78 @@ function Punsch_Options_EditECBText_Create()
 	e:SetScript("OnShow",PunschEditFrames["ECBText"].update)
 
 	PunschEditFrames["ECBText"].Handle:Hide()
+end
+
+function Punsch_Options_About_Create() 
+	PunschEditFrames["About"] = {}
+	PunschEditFrames["About"].Handle,PunschEditFrames["About"].ChildHandle = Punsch_Options_EditFrame_Create("About") 
+	local e = PunschEditFrames["About"].ChildHandle
+
+	local Iconbox = e:CreateTexture(nil,"BACKGROUND")
+	Iconbox:SetTexture("World\\Dungeon\\Cave\\PassiveDoodads\\Icicles\\Bp_mcaveIcicle_rock2")
+	Iconbox:SetAllPoints()
+
+	cfs = function(text,fontsize)
+		local txt = e:CreateFontString(nil,"OVERLAY")
+		txt:SetFont(headerFont, fontsize)
+		txt:SetShadowColor(0,0,0,1)
+		txt:SetShadowOffset(0.8,-0.8)
+		txt:SetText(text)
+		txt:SetHeight(25)
+		txt:SetJustifyH("CENTER")
+		return txt
+	end
+	local t = -45
+
+	local txt = cfs("Punschrulle Castbar v" .. PunschrulleVersion,30)
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
+	txt:SetPoint("RIGHT", e)
+
+	t = t -23
+	local txt = cfs("By Attero",20)
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
+	txt:SetPoint("RIGHT", e)
+
+	t = t -53
+	local editbox = CreateFrame("EditBox",nil,e)
+	editbox:SetHeight(25)
+	editbox:SetFont(headerFont, 20)
+	editbox:SetJustifyH("CENTER")
+	editbox:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
+	editbox:SetPoint("RIGHT", e)
+	editbox:SetText("Github.com/Attero/Punschrulle")
+	editbox:SetAutoFocus(false)
+
+	t = t -83
+	local txt = cfs("Thanks to",20)
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
+	txt:SetPoint("RIGHT", e)
+
+	t = t -23
+	local txt = cfs("Pizzalol",20)
+	txt:SetJustifyH("CENTER")
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
+	txt:SetPoint("RIGHT", e, "LEFT",160,0)
+
+	local txt = cfs("Broler",20)
+	txt:SetJustifyH("CENTER")
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",160,t)
+	txt:SetPoint("RIGHT", e, "LEFT",320,0)
+
+	local txt = cfs("Chrys",20)
+	txt:SetJustifyH("CENTER")
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",320,t)
+	txt:SetPoint("RIGHT", e)
+
+	t = t -23
+	local txt = cfs("<Praise>",20)
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
+	txt:SetPoint("RIGHT", e)
+
+	t = t -23
+	local txt = cfs("raisnilt for his aimed shot workaround",20)
+	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
+	txt:SetPoint("RIGHT", e)
+
+	PunschEditFrames["About"].Handle:Hide()
 end

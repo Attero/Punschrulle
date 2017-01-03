@@ -15,7 +15,7 @@ function Punsch_Bar_Create(e,db)
 	e.icon = e.TextFrame:CreateTexture()
 	e.icon:SetTexture("Interface\\Icons\\Spell_Frost_FrostBolt02")
 	e.icon:SetTexCoord(0.07,0.93,0.08,0.93)
-	e.icon:SetPoint("TOPLEFT", e.self,"TOPLEFT",-e.self:GetHeight(),0);
+	e.icon:SetPoint("TOPLEFT", e.self,"TOPLEFT",-e.self:GetHeight(),0)
 	e.icon:SetWidth(e.self:GetHeight())
 	e.icon:SetHeight(e.self:GetHeight())
 
@@ -35,11 +35,11 @@ function Punsch_Bar_Create(e,db)
 	e.frameTopIcon = e.FramingFrame:CreateTexture(nil,"ARTWORK")
 	e.frameMidIcon = e.FramingFrame:CreateTexture(nil,"BORDER")
 
-	e.selfBG:SetAllPoints(e.self);
+	e.selfBG:SetAllPoints(e.self)
 
 	e.isBar = true
-	e.selfFillShown = true;
-	e.isFading = false;
+	e.selfFillShown = true
+	e.isFading = false
 end
 
 function Punsch_Bar_Update(e,db)
@@ -79,7 +79,7 @@ function Punsch_Bar_Update(e,db)
 	e.ShowIcon = db.ShowIcon
 	if e.ShowIcon then
 		e.icon:SetAlpha(1)
-		e.icon:SetPoint("TOPLEFT", e.self,"TOPLEFT",-e.self:GetHeight() -db.IconPadding,0);
+		e.icon:SetPoint("TOPLEFT", e.self,"TOPLEFT",-e.self:GetHeight() -db.IconPadding,0)
 		e.icon:SetWidth(e.self:GetHeight())
 		e.icon:SetHeight(e.self:GetHeight())
 		e.self:SetWidth(db.Width-db.Height)
@@ -96,9 +96,9 @@ function Punsch_Bar_Update(e,db)
 
 	if db.Frame.Enable then
 		e.FramingFrame:Show()
-		e.frameBot:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
-		e.frameTopBar:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
-		e.frameMidBar:SetTexture(db.Frame.r,db.Frame.b,db.Frame.g,db.Frame.a)
+		e.frameBot:SetTexture(db.Frame.Borderr,db.Frame.Borderg,db.Frame.Borderb,db.Frame.Bordera)
+		e.frameTopBar:SetTexture(db.Frame.Borderr,db.Frame.Borderg,db.Frame.Borderb,db.Frame.Bordera)
+		e.frameMidBar:SetTexture(db.Frame.r,db.Frame.g,db.Frame.b,db.Frame.a)
 
 		e.frameTopBar:SetPoint("TOPLEFT", e.self,"TOPLEFT",-db.Frame.InnerBorderSize,db.Frame.InnerBorderSize)
 		e.frameTopBar:SetPoint("BOTTOMRIGHT", e.self,"BOTTOMRIGHT",db.Frame.InnerBorderSize,-db.Frame.InnerBorderSize)
@@ -106,8 +106,8 @@ function Punsch_Bar_Update(e,db)
 		e.frameMidBar:SetPoint("BOTTOMRIGHT", e.frameTopBar,"BOTTOMRIGHT",db.Frame.Thickness,-db.Frame.Thickness)
 
 		if e.ShowIcon then
-			e.frameTopIcon:SetTexture(db.Frame.Borderr,db.Frame.Borderb,db.Frame.Borderg,db.Frame.Bordera)
-			e.frameMidIcon:SetTexture(db.Frame.r,db.Frame.b,db.Frame.g,db.Frame.a)
+			e.frameTopIcon:SetTexture(db.Frame.Borderr,db.Frame.Borderg,db.Frame.Borderb,db.Frame.Bordera)
+			e.frameMidIcon:SetTexture(db.Frame.r,db.Frame.g,db.Frame.b,db.Frame.a)
 			e.frameTopIcon:SetPoint("TOPLEFT", e.icon,"TOPLEFT",-db.Frame.InnerBorderSize,db.Frame.InnerBorderSize)
 			e.frameTopIcon:SetPoint("BOTTOMRIGHT", e.icon,"BOTTOMRIGHT",db.Frame.InnerBorderSize,-db.Frame.InnerBorderSize)
 			e.frameMidIcon:SetPoint("TOPLEFT", e.frameTopIcon,"TOPLEFT",-db.Frame.Thickness,db.Frame.Thickness)
@@ -160,8 +160,8 @@ function Punsch_Bar_Update(e,db)
 	e.text2:SetText("")	
 	e.text2:SetText(t)
 
-	e.fadeTime = db.Fade.Time;
-	e.fadeEnable = db.Fade.Enable;
+	e.fadeTime = db.Fade.Time
+	e.fadeEnable = db.Fade.Enable
 
 	Punsch_Bar_SetPercent(e,0,0.7)
 end
@@ -169,7 +169,7 @@ end
 function Punsch_Bar_FadeStop(e) 
 	if e.isFading == true then
 		e.ContentFrame:SetAlpha(1)
-		e.isFading = false;
+		e.isFading = false
 	end
 end
 
@@ -177,18 +177,18 @@ function Punsch_Bar_SetPercent(e,left,right)
 	if right >= 0.01 then
 		if right >=1 then right = 1 end
 		if not e.selfFillShown == true then
-			e.selfFill:Show();
+			e.selfFill:Show()
 			if e.ShowSpark then e.spark:Show() end
-			e.selfFillShown = true;
+			e.selfFillShown = true
 		end
-		e.selfFill:SetWidth(e.self:GetWidth()*(right-left));
+		e.selfFill:SetWidth(e.self:GetWidth()*(right-left))
 
 		if not e.StretchTexture then
 			e.selfFill:SetTexCoord(left,right,0,1)
 		end
 	else
-		e.selfFill:Hide();
+		e.selfFill:Hide()
 		if e.ShowSpark then e.spark:Hide() end
-		e.selfFillShown = false;
+		e.selfFillShown = false
 	end
 end

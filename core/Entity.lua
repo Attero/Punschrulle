@@ -13,7 +13,7 @@ function Punsch_Entity_Create(e,db)
 	e.selfBG:SetAllPoints(e.self)
 
 	e.selfFill = e.ContentFrame:CreateTexture(nil,"BORDER")
-	e.selfFill:SetPoint("TOPLEFT", e.self);
+	e.selfFill:SetPoint("TOPLEFT", e.self)
 	e.selfFill:SetHeight(db.Height)
 
 	e.self:SetPoint(db.Anchor.Point,UIParent,db.Anchor.rPoint,db.Anchor.X,db.Anchor.Y)
@@ -169,17 +169,17 @@ end
 function Punsch_Entity_UnlockAll()
 	for _,e in pairs(PunschEntities) do
 		if not e.UnlockFrame then Punsch_Entity_CreateUnlock(e) end
-		e.UnlockFrame:Show();
-		e.self:SetMovable(true);
-		e.UnlockFrame:EnableMouse(true);
+		e.UnlockFrame:Show()
+		e.self:SetMovable(true)
+		e.UnlockFrame:EnableMouse(true)
 	end
 end
 
 function Punsch_Entity_LockAll()
 	for _,e in pairs(PunschEntities) do
 		if not e.UnlockFrame then Punsch_Entity_CreateUnlock(e) end
-		e.UnlockFrame:Hide();
-		e.self:SetMovable(false);
-		e.UnlockFrame:EnableMouse(false);
+		e.UnlockFrame:Hide()
+		e.self:SetMovable(false)
+		e.UnlockFrame:EnableMouse(false)
 	end
 end

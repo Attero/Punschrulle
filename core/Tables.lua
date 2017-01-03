@@ -155,6 +155,7 @@ Punsch_Tables_KnownChannels = {
 Punsch_Tables_ProfilePresets = {
 	Default = {
 		Name = "New Profile (Default)",
+		MuteWelcomeMessage = false,
 		["Entities"] = {
 			["Castbar"] = {
 				--Entity
@@ -255,17 +256,17 @@ Punsch_Tables_ProfilePresets = {
 
 				Frame = {
 					Enable = true,
-					Thickness = 0,
-					InnerBorderSize = 0.9,
+					Thickness = 0.8,
+					InnerBorderSize = 0,
 					OuterBorderSize = 0,
-					Borderr = 0,
-					Borderg = 0,
-					Borderb = 0,
-					Bordera = 1,
-					r = 1,
-					g = 1,
-					b = 1,
-					a = 0,
+					Borderr = 1,
+					Borderg = 1,
+					Borderb = 1,
+					Bordera = 0,
+					r = 0,
+					g = 0,
+					b = 0,
+					a = 1,
 				},
 
 				--Castbar
@@ -352,7 +353,7 @@ Punsch_Tables_ProfilePresets = {
 					PlayerInterruptAsFailure = true,
 					FailureHoldTime = 0,
 					SuccessHoldTime = 0,
-					ShowLagWhileFading = false,
+					ShowLagWhileFading = true,
 					Success = {
 						r = 0.2,
 						g = 0.6,
@@ -422,11 +423,6 @@ Punsch_Tables_ProfilePresets = {
 					a = 1,
 				},
 
-				Font = "TradeWinds",
-				FontSize = 10,
-				FontShadowX = 0.8,
-				FontShadowY = 0.8,
-
 				TextLeft = {
 					X = 2,
 					Y = 0,
@@ -467,17 +463,17 @@ Punsch_Tables_ProfilePresets = {
 
 				Frame = {
 					Enable = true,
-					Thickness = 0,
-					InnerBorderSize = 0.9,
+					Thickness = 0.8,
+					InnerBorderSize = 0,
 					OuterBorderSize = 0,
-					Borderr = 0,
-					Borderg = 0,
-					Borderb = 0,
-					Bordera = 1,
-					r = 1,
-					g = 1,
-					b = 1,
-					a = 0,
+					Borderr = 1,
+					Borderg = 1,
+					Borderb = 1,
+					Bordera = 0,
+					r = 0,
+					g = 0,
+					b = 0,
+					a = 1,
 				},
 
 				--Mirror
