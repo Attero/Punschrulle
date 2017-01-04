@@ -44,7 +44,6 @@ PunschrulleTextures = {
 	Gloss = "Interface\\AddOns\\Punschrulle\\media\\textures\\Gloss",
 	Healbot = "Interface\\AddOns\\Punschrulle\\media\\textures\\Healbot",
 	LiteStep = "Interface\\AddOns\\Punschrulle\\media\\textures\\LiteStep",
-	Luna = "Interface\\AddOns\\Punschrulle\\media\\textures\\Luna",
 	Lyfe = "Interface\\AddOns\\Punschrulle\\media\\textures\\Lyfe",
 	Minimalist = "Interface\\AddOns\\Punschrulle\\media\\textures\\Minimalist",
 	Otravi = "Interface\\AddOns\\Punschrulle\\media\\textures\\Otravi",

@@ -2970,7 +2970,7 @@ function Punsch_Options_About_Create()
 	txt:SetPoint("RIGHT", e)
 
 	t = t -23
-	local txt = cfs("raisnilt for his aimed shot workaround",20)
+	local txt = cfs("Raisnilt for his aimed shot workaround",20)
 	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
 	txt:SetPoint("RIGHT", e)
 
