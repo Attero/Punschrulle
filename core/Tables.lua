@@ -163,7 +163,7 @@ Punsch_Tables_ProfilePresets = {
 				Height = 30,
 				Anchor = {
 					X = -177,
-					Y = -215,
+					Y = -215.5,
 					rPoint = "CENTER",
 					rTo = "",
 					Point = "TOPLEFT"
@@ -181,7 +181,7 @@ Punsch_Tables_ProfilePresets = {
 					a = 1
 				},
 
-				Texture = "Luna",
+				Texture = "Minimalist",
 				Border = {
 					Show = false,
 					Padding = 4,
@@ -389,7 +389,7 @@ Punsch_Tables_ProfilePresets = {
 					a = 1
 				},
 
-				Texture = "Luna",
+				Texture = "Minimalist",
 
 				Border = {
 					Show = false,

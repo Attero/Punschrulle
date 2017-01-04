@@ -21,7 +21,12 @@ PunschrulleFonts = {
 	TradeWinds = "Interface\\AddOns\\Punschrulle\\media\\fonts\\TradeWinds.ttf",
 	VeraSerif = "Interface\\AddOns\\Punschrulle\\media\\fonts\\VeraSerif.ttf",
 	Vixar = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Vixar.ttf",
-	Yellowjacket = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Yellowjacket.ttf"
+	Yellowjacket = "Interface\\AddOns\\Punschrulle\\media\\fonts\\Yellowjacket.ttf",
+	Exocet = "Interface\\AddOns\\Punschrulle\\media\\fonts\\exocet.ttf",
+	Budhand = "Interface\\AddOns\\Punschrulle\\media\\fonts\\budhand.ttf",
+	ArialNarrow = "Fonts\\ARIALN.TTF",
+	Skurri = "Fonts\\skurri.ttf",
+	Morpheus = "Fonts\\MORPHEUS.ttf",
 }
 
 PunschrulleTextures = {
@@ -42,6 +47,7 @@ PunschrulleTextures = {
 	Glamour7 = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glamour7",
 	Glaze = "Interface\\AddOns\\Punschrulle\\media\\textures\\Glaze",
 	Gloss = "Interface\\AddOns\\Punschrulle\\media\\textures\\Gloss",
+	Graphite = "Interface\\AddOns\\Punschrulle\\media\\textures\\Graphite",
 	Healbot = "Interface\\AddOns\\Punschrulle\\media\\textures\\Healbot",
 	LiteStep = "Interface\\AddOns\\Punschrulle\\media\\textures\\LiteStep",
 	Lyfe = "Interface\\AddOns\\Punschrulle\\media\\textures\\Lyfe",

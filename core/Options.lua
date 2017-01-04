@@ -2974,5 +2974,6 @@ function Punsch_Options_About_Create()
 	txt:SetPoint("TOPLEFT", e, "TOPLEFT",0,t)
 	txt:SetPoint("RIGHT", e)
 
+	PunschEditFrames["About"].update = function () end
 	PunschEditFrames["About"].Handle:Hide()
 end
