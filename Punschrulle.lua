@@ -37,7 +37,7 @@ function Punschrulle_OnEvent()
 
 			Punsch_Castbar_Create()
 			Punsch_Mirror_Create()
-			--Punsch_ECB_Create()
+			Punsch_SwingTimer_Create()
 			Punsch_Entity_UpdateAll()
 		end
 	end

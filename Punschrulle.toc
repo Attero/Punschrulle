@@ -15,3 +15,4 @@ core\Entity.lua
 core\Bar.lua
 core\Castbar.lua
 core\Mirror.lua
+core\SwingTimer.lua

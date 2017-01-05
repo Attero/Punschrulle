@@ -570,6 +570,123 @@ Punsch_Tables_ProfilePresets = {
 					},
 				}
 			},
+			["SwingTimer"] = {
+				--Entity
+				Width = 240,
+				Height = 15,
+				Anchor = {
+					X = -419.5,
+					Y = -135,
+					rPoint = "CENTER",
+					rTo = "",
+					Point = "TOPLEFT"
+				},
+				Bg = {
+					r = 0,
+					g = 0,
+					b = 0,
+					a = 1
+				},
+
+				Texture = "Minimalist",
+
+				Border = {
+					Show = false,
+					Padding = 4,
+					Size = 16,
+					r = 0,
+					g = 0,
+					b = 0,
+					a = 1,
+					OnTop = true
+				},
+
+				--Bar
+				AlwaysShow = false,
+				ShowTextureOnFullBar = false;
+				StretchTexture = false,
+				Decimals = 1,
+
+				BorderEncompassIcon = false,
+
+				ShowIcon = true,
+				IconPadding = 1,
+
+				Spark = {
+					Enable = true,
+					Height = 22,
+					Width = 15,
+					r = 0.13,
+					g = 0.23,
+					b = 0.34,
+					a = 1,
+				},
+
+				TextLeft = {
+					X = 2,
+					Y = 0,
+					rPoint = "LEFT",
+					Point = "LEFT",
+					r = 1,
+					g = 1,
+					b = 1,
+					a = 1,
+					sr = 0,
+					sg = 0,
+					sb = 0,
+					sa = 1,
+					Font = "Vixar",
+					FontSize = 10,
+					FontShadowX = 0.8,
+					FontShadowY = -0.8,
+				},
+
+				TextRight = {
+					X = -2,
+					Y = 0,
+					rPoint = "RIGHT",
+					Point = "RIGHT",
+					r = 1,
+					g = 1,
+					b = 1,
+					a = 1,
+					sr = 0,
+					sg = 0,
+					sb = 0,
+					sa = 1,
+					Font = "Vixar",
+					FontSize = 10,
+					FontShadowX = 0.8,
+					FontShadowY = -0.8,
+				},
+
+				Frame = {
+					Enable = true,
+					Thickness = 0,
+					InnerBorderSize = 0.9,
+					OuterBorderSize = 0,
+					Borderr = 0,
+					Borderg = 0,
+					Borderb = 0,
+					Bordera = 1,
+					r = 1,
+					g = 1,
+					b = 1,
+					a = 0,
+				},
+
+				--SwingTimer
+				Fade = {
+					Enable = true,
+					Time = 0.9,
+					r = 0.6,
+					g = 0.2,
+					b = 0.2,
+					a = 1
+				},
+				--Add swingtimer specific options here
+				--Example: Show offhand swingtimer, show weapon name, show swingtimer when not in range, etc whatever
+			}
 		}
 	},
 }
