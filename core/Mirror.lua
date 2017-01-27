@@ -211,7 +211,7 @@ function Punsch_Mirror_OnEvent()
 	    	PunschMirrorEvents["GAMESTART"].label = PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Mirror"]["Events"]["GAMESTART"].label
 	    	PunschMirrorEvents["GAMESTART"].value = 30000
 	    	Punsch_Mirror_AssignFirstUnassignedEvent(PunschMirrorEvents["GAMESTART"])
-	    elseif strfind(arg1,"Let the battle for") then 
+	    elseif strfind(arg1,"Let the battle for") or strfind(arg1,"The Battle for Arathi Basin has begun!")  then --well memed nost
 	    	Punsch_Mirror_OnEventStop(PunschMirrorEvents["GAMESTART"])
 	    elseif strfind(arg1,"The flags are now placed at their bases.") then 
 	    	Punsch_Mirror_OnEventStop(PunschMirrorEvents["WSG_FLAGRESPAWN"])
