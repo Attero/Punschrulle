@@ -90,8 +90,8 @@ function Punsch_Entity_CreateUnlock(e)
 end
 
 function Punsch_Entity_Startmove()
-		this:GetParent().IsMovingOrSizing = 1
-		this:GetParent():StartMoving()
+	this:GetParent().IsMovingOrSizing = 1
+	this:GetParent():StartMoving()
 end
 
 function Punsch_Entity_GetRelativePoint(e,point,relativeTo,relativePoint)

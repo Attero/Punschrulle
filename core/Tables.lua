@@ -271,6 +271,9 @@ Punsch_Tables_ProfilePresets = {
 
 				--Castbar
 
+				ShowMultiShot = false,
+				ShowAimedShot = true,
+
 				ShowRank = false,
 				RankAsRoman = true,
 				RankAsShort = true,

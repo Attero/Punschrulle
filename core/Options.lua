@@ -1294,6 +1294,18 @@ function Punsch_Options_EditCastbar_Create()
 
 	Punsch_Options_EditFrame_CreateHeaderOption(e,"Advanced Behavior")
 
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Castbar on Multi-Shot", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowMultiShot
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowMultiShot = s
+	end)
+
+	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Castbar on Aimed Shot", function ()
+		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowAimedShot
+	end, function (s)
+		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ShowAimedShot = s
+	end)
+
 	e.o[e.num] = Punsch_Options_EditFrame_CreateCheckBoxOption(e,"Delay to Channel Duration", function ()
 		return PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].ChannelDelayToDuration
 	end, function (s)

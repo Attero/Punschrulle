@@ -44,6 +44,7 @@ function Punsch_Castbar_Create()
 	e.HasteFromQuickShots = 1
 	e.HasteFromKiss = 1
 	e.HasteFromRapid = 1
+	e.HasteFromAncientDespair = 1
 
 	--Channeling Ticks
 	e.TickIndicators = {}
@@ -135,6 +136,9 @@ function Punsch_Castbar_Update(e)
 	e.RankAsShort = db.RankAsShort
 	e.UCSN = db.UpperCaseSpellName
 
+	e.multishot = db.ShowMultiShot
+	e.aimedshot = db.ShowAimedShot
+
 	e.fadeTolerance = db.Fade.Tolerance
 	e.fadesht = db.Fade.SuccessHoldTime
 	e.fadefht = db.Fade.FailureHoldTime
@@ -181,6 +185,13 @@ function Punsch_Castbar_Update(e)
 			db.Anchor.X,
 			db.Anchor.Y)
 	end
+
+	--if db.MultiLineSpellName then
+	--	e.text1:SetPoint("RIGHT",e.text3,"LEFT")
+	--	e.text1:SetNonSpaceWrap(false)
+
+		--e.text1:SetWordWrap(true)
+	--end
 
 	for i=1,15 do 
 		--Tick.ShowLag
@@ -273,6 +284,7 @@ function Punsch_Castbar_OnEvent()
     	PunschEntities["Castbar"].HasteFromQuickShots = 1
     	PunschEntities["Castbar"].HasteFromKiss = 1
     	PunschEntities["Castbar"].HasteFromRapid = 1
+    	PunschEntities["Castbar"].HasteFromAncientDespair = 1
     elseif (event == "SPELLS_CHANGED") then
     	PunschEntities["Castbar"].spellDB = {}
     else 	
@@ -310,8 +322,10 @@ function Punsch_Castbar_HookUseAction(slot, checkCursor, onSelf)
 			Punsch_Castbar_TooltipTextRight1:SetText()
 			e.Tooltip:SetAction(slot)
 			local spellName = Punsch_Castbar_TooltipTextLeft1:GetText()
-			if ( spellName == "Aimed Shot" )  then
+			if ( spellName == "Aimed Shot" ) then
 				Punsch_Castbar_CastAimedShot()
+			elseif ( spellName == "Multi-Shot" ) then
+				Punsch_Castbar_CastMultiShot()
 			end
 		end
 		--lag, icons, rank
@@ -353,6 +367,8 @@ function Punsch_Castbar_HookCastSpell(spellID, spellTab)
 	--detecting Aimed Shot
 	if name == "Aimed Shot" then
 		Punsch_Castbar_CastAimedShot()
+	elseif name == "Multi-Shot" then
+		Punsch_Castbar_CastMultiShot()
 	end
 
 	e.OriginalCastSpell(spellID, spellTab)
@@ -381,6 +397,8 @@ function Punsch_Castbar_HookCastSpellByName(spellName,target)
 	--detecting Aimed Shot
 	if spellName == "Aimed Shot" then
 		Punsch_Castbar_CastAimedShot()
+	elseif spellName == "Multi-Shot" then
+		Punsch_Castbar_CastMultiShot()
 	end
 
 	e.OriginalCastSpellByName(spellName,target)
@@ -388,9 +406,16 @@ end
 
 function Punsch_Castbar_CastAimedShot()
 	local e = PunschEntities["Castbar"]
-	if not e.isCasting then
-		local AimedCastTime = 3000/e.HasteFromBerserking/e.HasteFromQuickShots/e.HasteFromKiss/e.HasteFromRapid
+	if not e.isCasting and e.aimedshot then
+		local AimedCastTime = 3000/e.HasteFromBerserking/e.HasteFromQuickShots/e.HasteFromKiss/e.HasteFromRapid/e.HasteFromAncientDespair
 		Punsch_Castbar_OnCastStart("Aimed Shot",AimedCastTime)
+	end
+end
+
+function Punsch_Castbar_CastMultiShot()
+	local e = PunschEntities["Castbar"]
+	if not e.isCasting and e.multishot then
+		Punsch_Castbar_OnCastStart("Multi-Shot",500)
 	end
 end
 
@@ -666,7 +691,7 @@ function Punsch_Castbar_OnCastFailed()
 	local e = PunschEntities["Castbar"]
 	if e.isChannel ~= true then
 		e.isCasting = false
-		if e.spellName == "Aimed Shot" and e.startTime - GetTime() < 0.08 then
+		if (e.spellName == "Aimed Shot" or e.spellName == "Multi-Shot") and e.startTime - GetTime() < 0.08 then
 			if not e.isFading then
 				e.ContentFrame:Hide()
 			end
@@ -686,6 +711,7 @@ function Punsch_Castbar_OnCastStart(name,duration)
 	e.delayedBy = 0
 	e.startTime = GetTime()
 	e.endTime = e.startTime + e.duration
+	e.rank = nil
 	e.selfFill:SetPoint("TOPLEFT",e.self)
 	e.selfFill:SetVertexColor(PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fill.r,
 		PunschrulleDB.Profiles[PunschrulleProfile]["Entities"]["Castbar"].Fill.g,
@@ -708,6 +734,9 @@ function Punsch_Castbar_OnCastStart(name,duration)
 	--]]
 	elseif e.spellName == "Aimed Shot" then
 		e.icontexture = "Interface\\Icons\\INV_Spear_07"
+		e.lag = nil
+	elseif e.spellName == "Multi-Shot" then
+		e.icontexture = "Interface\\Icons\\Ability_UpgradeMoonGlaive"
 		e.lag = nil
 	else
 		e.lag, e.icontexture, e.rank = Punsch_Castbar_GetLastSpellInfo() 

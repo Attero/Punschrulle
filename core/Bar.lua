@@ -6,6 +6,7 @@ function Punsch_Bar_Create(e,db)
 
 	e.text1 = e.TextFrame:CreateFontString(nil,"OVERLAY")
 	e.text1:SetFont(GameFontNormal:GetFont(), 10)
+	e.text1:SetJustifyH("LEFT")
 	e.text1:SetText("Frostbolt")
 
 	e.text2 = e.TextFrame:CreateFontString(nil,"OVERLAY")
